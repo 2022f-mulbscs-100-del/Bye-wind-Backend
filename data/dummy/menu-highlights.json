@@ -1,0 +1,64 @@
+{
+  "highlightsById": {
+    "c1a1b1a0-0c1e-4f2f-8f4c-1a1111111111": [
+      { "name": "Roasted salmon", "description": "Citrus glaze, baby fennel, herb oil.", "price": "$28", "tag": "Chef pick" },
+      { "name": "Steak frites", "description": "Dry-aged sirloin, truffle fries.", "price": "$32", "tag": "Popular" },
+      { "name": "Seasonal risotto", "description": "Spring peas, parmesan, lemon zest.", "price": "$22", "tag": "Vegetarian" },
+      { "name": "Skyline tart", "description": "Chocolate ganache, sea salt, berries.", "price": "$12", "tag": "Dessert" }
+    ],
+    "c1a1b1a0-0c1e-4f2f-8f4c-1a2222222222": [
+      { "name": "Butter chicken", "description": "Tomato cream, basmati rice.", "price": "$20", "tag": "Best seller" },
+      { "name": "Lamb biryani", "description": "Saffron rice, caramelized onion.", "price": "$24", "tag": "Spicy" },
+      { "name": "Paneer tikka", "description": "Charred paneer, mint chutney.", "price": "$16", "tag": "Vegetarian" },
+      { "name": "Mango lassi", "description": "Sweet mango yogurt drink.", "price": "$7", "tag": "Drink" }
+    ],
+    "c1a1b1a0-0c1e-4f2f-8f4c-1a3333333333": [
+      { "name": "Kale crunch bowl", "description": "Quinoa, avocado, citrus vinaigrette.", "price": "$18", "tag": "Vegan" },
+      { "name": "Miso mushroom toast", "description": "Sourdough, shiitake, sesame.", "price": "$14", "tag": "Popular" },
+      { "name": "Green smoothie", "description": "Spinach, pineapple, ginger.", "price": "$9", "tag": "Drink" },
+      { "name": "Chia pudding", "description": "Coconut milk, berry compote.", "price": "$10", "tag": "Dessert" }
+    ],
+    "c1a1b1a0-0c1e-4f2f-8f4c-1a4444444444": [
+      { "name": "Grilled sea bass", "description": "Lemon butter, asparagus.", "price": "$30", "tag": "Chef pick" },
+      { "name": "Lobster roll", "description": "Toasted brioche, herb mayo.", "price": "$26", "tag": "Popular" },
+      { "name": "Clam chowder", "description": "Classic creamy New England style.", "price": "$12", "tag": "Starter" },
+      { "name": "Citrus sorbet", "description": "Blood orange, lime zest.", "price": "$8", "tag": "Dessert" }
+    ],
+    "c1a1b1a0-0c1e-4f2f-8f4c-1a5555555555": [
+      { "name": "Margherita pizza", "description": "San Marzano, buffalo mozzarella.", "price": "$18", "tag": "Classic" },
+      { "name": "Truffle pasta", "description": "Tagliatelle, pecorino, truffle.", "price": "$24", "tag": "Popular" },
+      { "name": "Caprese salad", "description": "Heirloom tomato, basil oil.", "price": "$14", "tag": "Vegetarian" },
+      { "name": "Tiramisu", "description": "Espresso cream, cocoa dust.", "price": "$11", "tag": "Dessert" }
+    ],
+    "c1a1b1a0-0c1e-4f2f-8f4c-1a6666666666": [
+      { "name": "Ribeye steak", "description": "Dry-aged 16oz, rosemary butter.", "price": "$38", "tag": "Signature" },
+      { "name": "Smoked brisket", "description": "House rub, bourbon glaze.", "price": "$26", "tag": "Popular" },
+      { "name": "Caesar salad", "description": "Grana padano, sourdough croutons.", "price": "$12", "tag": "Starter" },
+      { "name": "Old fashioned", "description": "Small batch bourbon, orange peel.", "price": "$14", "tag": "Drink" }
+    ],
+    "c1a1b1a0-0c1e-4f2f-8f4c-1a7777777777": [
+      { "name": "Avocado toast", "description": "Poached egg, chili flakes.", "price": "$12", "tag": "Popular" },
+      { "name": "Buttermilk pancakes", "description": "Maple syrup, seasonal berries.", "price": "$13", "tag": "Classic" },
+      { "name": "Breakfast burrito", "description": "Egg, cheddar, salsa roja.", "price": "$14", "tag": "Spicy" },
+      { "name": "Cold brew", "description": "Slow-steeped, vanilla cream.", "price": "$6", "tag": "Drink" }
+    ],
+    "c1a1b1a0-0c1e-4f2f-8f4c-1a8888888888": [
+      { "name": "Sushi omakase", "description": "Chef's seasonal nigiri set.", "price": "$42", "tag": "Signature" },
+      { "name": "Tonkotsu ramen", "description": "Rich pork broth, chashu.", "price": "$18", "tag": "Popular" },
+      { "name": "Spicy tuna roll", "description": "Crispy tempura, house sauce.", "price": "$14", "tag": "Spicy" },
+      { "name": "Matcha cheesecake", "description": "Silky matcha cream.", "price": "$10", "tag": "Dessert" }
+    ],
+    "c1a1b1a0-0c1e-4f2f-8f4c-1a9999999999": [
+      { "name": "Street tacos", "description": "Al pastor, pineapple salsa.", "price": "$15", "tag": "Popular" },
+      { "name": "Birria quesadilla", "description": "Slow-braised beef, consommé.", "price": "$18", "tag": "Signature" },
+      { "name": "Elote", "description": "Grilled corn, cotija, lime.", "price": "$9", "tag": "Starter" },
+      { "name": "Hibiscus agua fresca", "description": "Refreshing floral tea.", "price": "$6", "tag": "Drink" }
+    ],
+    "c1a1b1a0-0c1e-4f2f-8f4c-1b0000000000": [
+      { "name": "Hand-pulled noodles", "description": "Sichuan chili, scallion oil.", "price": "$16", "tag": "Popular" },
+      { "name": "Kung pao chicken", "description": "Peanuts, dried chili, garlic.", "price": "$19", "tag": "Spicy" },
+      { "name": "Vegetable dumplings", "description": "Steamed, ginger soy dip.", "price": "$12", "tag": "Vegetarian" },
+      { "name": "Jasmine tea", "description": "Fragrant hot tea pot.", "price": "$5", "tag": "Drink" }
+    ]
+  }
+}

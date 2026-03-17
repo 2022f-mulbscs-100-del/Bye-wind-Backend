@@ -1,0 +1,239 @@
+{
+  "restaurantId": "rest_001",
+  "branchId": "branch_001",
+  "layoutVersion": 1,
+  "activeFloorId": "f1",
+  "settings": {
+    "snapToGrid": true,
+    "sidebarOpen": true,
+    "gridSize": 10,
+    "canvas": {
+      "width": 1600,
+      "height": 560
+    }
+  },
+  "areaDraftDefaults": {
+    "label": "",
+    "type": "Restaurant Area",
+    "width": 320,
+    "height": 180,
+    "zIndex": 1,
+    "cornerRadius": 24
+  },
+  "floors": [
+    {
+      "id": "f1",
+      "label": "Ground Floor"
+    },
+    {
+      "id": "f2",
+      "label": "First Floor"
+    },
+    {
+      "id": "f3",
+      "label": "Rooftop"
+    }
+  ],
+  "floorLayouts": {
+    "f1": {
+      "selectedTableId": "t1",
+      "selectedAreaId": "a1",
+      "tables": [
+        {
+          "id": "t1",
+          "name": "Table 01",
+          "x": 80,
+          "y": 60,
+          "width": 90,
+          "height": 90,
+          "rotation": 0,
+          "seats": 4,
+          "spacing": 12,
+          "zone": "Indoor",
+          "shape": "Round"
+        },
+        {
+          "id": "t2",
+          "name": "Table 02",
+          "x": 220,
+          "y": 70,
+          "width": 120,
+          "height": 80,
+          "rotation": 10,
+          "seats": 6,
+          "spacing": 14,
+          "zone": "Indoor",
+          "shape": "Rectangle"
+        },
+        {
+          "id": "t3",
+          "name": "Bar 1",
+          "x": 420,
+          "y": 80,
+          "width": 140,
+          "height": 60,
+          "rotation": -5,
+          "seats": 5,
+          "spacing": 10,
+          "zone": "Bar",
+          "shape": "Rectangle"
+        },
+        {
+          "id": "t4",
+          "name": "Patio",
+          "x": 140,
+          "y": 210,
+          "width": 110,
+          "height": 110,
+          "rotation": 0,
+          "seats": 4,
+          "spacing": 16,
+          "zone": "Outdoor",
+          "shape": "Square"
+        }
+      ],
+      "areas": [
+        {
+          "id": "a1",
+          "label": "Restaurant Area",
+          "type": "Restaurant Area",
+          "x": 24,
+          "y": 24,
+          "width": 1040,
+          "height": 480,
+          "zIndex": 1,
+          "cornerRadius": 24
+        }
+      ]
+    },
+    "f2": {
+      "selectedTableId": "t5",
+      "selectedAreaId": "a2",
+      "tables": [
+        {
+          "id": "t5",
+          "name": "Table 05",
+          "x": 110,
+          "y": 80,
+          "width": 90,
+          "height": 90,
+          "rotation": 0,
+          "seats": 4,
+          "spacing": 12,
+          "zone": "Indoor",
+          "shape": "Round"
+        },
+        {
+          "id": "t6",
+          "name": "Table 06",
+          "x": 280,
+          "y": 90,
+          "width": 130,
+          "height": 85,
+          "rotation": 8,
+          "seats": 6,
+          "spacing": 14,
+          "zone": "Indoor",
+          "shape": "Rectangle"
+        },
+        {
+          "id": "t7",
+          "name": "Private 1",
+          "x": 520,
+          "y": 110,
+          "width": 150,
+          "height": 90,
+          "rotation": 0,
+          "seats": 8,
+          "spacing": 16,
+          "zone": "Private Dining",
+          "shape": "Rectangle"
+        },
+        {
+          "id": "t8",
+          "name": "Table 08",
+          "x": 180,
+          "y": 260,
+          "width": 110,
+          "height": 110,
+          "rotation": 0,
+          "seats": 4,
+          "spacing": 14,
+          "zone": "Indoor",
+          "shape": "Square"
+        }
+      ],
+      "areas": [
+        {
+          "id": "a2",
+          "label": "First Floor Dining",
+          "type": "Restaurant Area",
+          "x": 30,
+          "y": 30,
+          "width": 1160,
+          "height": 500,
+          "zIndex": 1,
+          "cornerRadius": 24
+        }
+      ]
+    },
+    "f3": {
+      "selectedTableId": "t9",
+      "selectedAreaId": "a3",
+      "tables": [
+        {
+          "id": "t9",
+          "name": "Rooftop 1",
+          "x": 90,
+          "y": 70,
+          "width": 95,
+          "height": 95,
+          "rotation": 0,
+          "seats": 4,
+          "spacing": 18,
+          "zone": "Outdoor",
+          "shape": "Round"
+        },
+        {
+          "id": "t10",
+          "name": "Rooftop 2",
+          "x": 260,
+          "y": 90,
+          "width": 120,
+          "height": 80,
+          "rotation": -6,
+          "seats": 6,
+          "spacing": 18,
+          "zone": "Outdoor",
+          "shape": "Rectangle"
+        },
+        {
+          "id": "t11",
+          "name": "Sky Bar",
+          "x": 480,
+          "y": 95,
+          "width": 150,
+          "height": 70,
+          "rotation": -4,
+          "seats": 6,
+          "spacing": 12,
+          "zone": "Bar",
+          "shape": "Rectangle"
+        }
+      ],
+      "areas": [
+        {
+          "id": "a3",
+          "label": "Rooftop Deck",
+          "type": "Lounge Area",
+          "x": 36,
+          "y": 36,
+          "width": 1220,
+          "height": 460,
+          "zIndex": 1,
+          "cornerRadius": 28
+        }
+      ]
+    }
+  }
+}

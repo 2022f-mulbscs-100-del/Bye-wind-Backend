@@ -1,0 +1,7 @@
+{
+  "features": [
+    { "name": "AI Waitlist", "enabled": true, "rollout": "100%" },
+    { "name": "VIP Insights", "enabled": true, "rollout": "60%" },
+    { "name": "Smart Pricing", "enabled": false, "rollout": "0%" }
+  ]
+}

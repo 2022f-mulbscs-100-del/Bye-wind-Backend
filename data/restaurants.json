@@ -1,0 +1,309 @@
+{
+  "filters": [
+    "Open now",
+    "Outdoor",
+    "Family friendly",
+    "Vegan",
+    "Halal",
+    "Rooftop"
+  ],
+  "restaurants": [
+    {
+      "id": "c1a1b1a0-0c1e-4f2f-8f4c-1a1111111111",
+      "name": "Skyline Bistro",
+      "cuisine": "Continental",
+      "rating": 4.6,
+      "location": "Downtown, NY",
+      "price": "$$$",
+      "nextSlot": "7:15 PM",
+      "tags": [
+        "Rooftop",
+        "City View"
+      ],
+      "image": "https://images.unsplash.com/photo-1528605248644-14dd04022da1"
+    },
+    {
+      "id": "c1a1b1a0-0c1e-4f2f-8f4c-1a2222222222",
+      "name": "Spice Route",
+      "cuisine": "South Asian",
+      "rating": 4.8,
+      "location": "Queens, NY",
+      "price": "$$",
+      "nextSlot": "6:00 PM",
+      "tags": [
+        "Halal",
+        "Family"
+      ],
+      "image": "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe"
+    },
+    {
+      "id": "c1a1b1a0-0c1e-4f2f-8f4c-1a3333333333",
+      "name": "Green Leaf Café",
+      "cuisine": "Vegan",
+      "rating": 4.5,
+      "location": "Brooklyn, NY",
+      "price": "$$",
+      "nextSlot": "5:30 PM",
+      "tags": [
+        "Vegan",
+        "Organic"
+      ],
+      "image": "https://images.unsplash.com/photo-1498837167922-ddd27525d352"
+    },
+    {
+      "id": "c1a1b1a0-0c1e-4f2f-8f4c-1a4444444444",
+      "name": "Harbor Catch",
+      "cuisine": "Seafood",
+      "rating": 4.7,
+      "location": "Marina, CA",
+      "price": "$$$",
+      "nextSlot": "8:00 PM",
+      "tags": [
+        "Waterfront",
+        "Wine"
+      ],
+      "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836"
+    },
+    {
+      "id": "c1a1b1a0-0c1e-4f2f-8f4c-1a5555555555",
+      "name": "Uptown Garden",
+      "cuisine": "Italian",
+      "rating": 4.8,
+      "location": "Oakland, CA",
+      "price": "$$",
+      "nextSlot": "6:45 PM",
+      "tags": [
+        "Outdoor",
+        "Family"
+      ],
+      "image": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5"
+    },
+    {
+      "id": "c1a1b1a0-0c1e-4f2f-8f4c-1a6666666666",
+      "name": "Fire & Stone",
+      "cuisine": "Steakhouse",
+      "rating": 4.9,
+      "location": "Manhattan, NY",
+      "price": "$$$$",
+      "nextSlot": "9:00 PM",
+      "tags": [
+        "Premium",
+        "Wine"
+      ],
+      "image": "https://images.unsplash.com/photo-1600891964599-f61ba0e24092"
+    },
+    {
+      "id": "c1a1b1a0-0c1e-4f2f-8f4c-1a7777777777",
+      "name": "Morning Dew",
+      "cuisine": "Breakfast",
+      "rating": 4.4,
+      "location": "Austin, TX",
+      "price": "$",
+      "nextSlot": "8:30 AM",
+      "tags": [
+        "Cafe",
+        "Organic"
+      ],
+      "image": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085"
+    },
+    {
+      "id": "c1a1b1a0-0c1e-4f2f-8f4c-1a8888888888",
+      "name": "Tokyo Street",
+      "cuisine": "Japanese",
+      "rating": 4.7,
+      "location": "San Jose, CA",
+      "price": "$$$",
+      "nextSlot": "7:30 PM",
+      "tags": [
+        "Sushi",
+        "Ramen"
+      ],
+      "image": "https://images.unsplash.com/photo-1553621042-f6e147245754"
+    },
+    {
+      "id": "c1a1b1a0-0c1e-4f2f-8f4c-1a9999999999",
+      "name": "El Camino",
+      "cuisine": "Mexican",
+      "rating": 4.5,
+      "location": "San Diego, CA",
+      "price": "$$",
+      "nextSlot": "6:15 PM",
+      "tags": [
+        "Tacos",
+        "Outdoor"
+      ],
+      "image": "https://images.unsplash.com/photo-1601924638867-3ec62f6c06c0"
+    },
+    {
+      "id": "c1a1b1a0-0c1e-4f2f-8f4c-1b0000000000",
+      "name": "Golden Wok",
+      "cuisine": "Chinese",
+      "rating": 4.3,
+      "location": "Fremont, CA",
+      "price": "$$",
+      "nextSlot": "5:45 PM",
+      "tags": [
+        "Noodles",
+        "Family"
+      ],
+      "image": "https://images.unsplash.com/photo-1544025162-d76694265947"
+    },{
+      "id": "d2f1a3b4-1a2b-4c5d-8e9f-100000000001",
+      "name": "Urban Tandoor",
+      "cuisine": "Indian",
+      "rating": 4.6,
+      "location": "Jersey City, NJ",
+      "price": "$$",
+      "nextSlot": "7:00 PM",
+      "tags": [
+        "Halal",
+        "Spicy"
+      ],
+      "image": "https://images.unsplash.com/photo-1600628422019-6c9f5c7a3c67"
+    },
+    {
+      "id": "d2f1a3b4-1a2b-4c5d-8e9f-100000000002",
+      "name": "Little Napoli",
+      "cuisine": "Italian",
+      "rating": 4.4,
+      "location": "Bronx, NY",
+      "price": "$$",
+      "nextSlot": "6:20 PM",
+      "tags": [
+        "Pizza",
+        "Family"
+      ],
+      "image": "https://images.unsplash.com/photo-1548365328-9f547fb095c8"
+    },
+    {
+      "id": "d2f1a3b4-1a2b-4c5d-8e9f-100000000003",
+      "name": "Bamboo Garden",
+      "cuisine": "Thai",
+      "rating": 4.7,
+      "location": "San Mateo, CA",
+      "price": "$$",
+      "nextSlot": "8:15 PM",
+      "tags": [
+        "Curry",
+        "Vegan Options"
+      ],
+      "image": "https://images.unsplash.com/photo-1559847844-5315695dadae"
+    },
+    {
+      "id": "d2f1a3b4-1a2b-4c5d-8e9f-100000000004",
+      "name": "Casa Verde",
+      "cuisine": "Mediterranean",
+      "rating": 4.5,
+      "location": "Santa Monica, CA",
+      "price": "$$$",
+      "nextSlot": "7:45 PM",
+      "tags": [
+        "Outdoor",
+        "Healthy"
+      ],
+      "image": "https://images.unsplash.com/photo-1526312426976-f4d754fa9bd6"
+    },
+    {
+      "id": "d2f1a3b4-1a2b-4c5d-8e9f-100000000005",
+      "name": "Smokehouse 44",
+      "cuisine": "BBQ",
+      "rating": 4.8,
+      "location": "Dallas, TX",
+      "price": "$$",
+      "nextSlot": "6:40 PM",
+      "tags": [
+        "Smoked",
+        "Meat Lovers"
+      ],
+      "image": "https://images.unsplash.com/photo-1555939594-58d7cb561ad1"
+    },
+    {
+      "id": "d2f1a3b4-1a2b-4c5d-8e9f-100000000006",
+      "name": "Ocean Pearl",
+      "cuisine": "Seafood",
+      "rating": 4.6,
+      "location": "Miami, FL",
+      "price": "$$$",
+      "nextSlot": "8:30 PM",
+      "tags": [
+        "Fine Dining",
+        "Wine"
+      ],
+      "image": "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4"
+    },
+    {
+      "id": "d2f1a3b4-1a2b-4c5d-8e9f-100000000007",
+      "name": "Nordic Table",
+      "cuisine": "Scandinavian",
+      "rating": 4.3,
+      "location": "Seattle, WA",
+      "price": "$$$",
+      "nextSlot": "6:50 PM",
+      "tags": [
+        "Minimal",
+        "Seafood"
+      ],
+      "image": "https://images.unsplash.com/photo-1550966871-3ed3cdb5ed0c"
+    },
+    {
+      "id": "d2f1a3b4-1a2b-4c5d-8e9f-100000000008",
+      "name": "Falafel Corner",
+      "cuisine": "Middle Eastern",
+      "rating": 4.2,
+      "location": "Dearborn, MI",
+      "price": "$",
+      "nextSlot": "5:15 PM",
+      "tags": [
+        "Vegan",
+        "Quick Bites"
+      ],
+      "image": "https://images.unsplash.com/photo-1599021456807-25db0f974a7b"
+    },
+    {
+      "id": "d2f1a3b4-1a2b-4c5d-8e9f-100000000009",
+      "name": "Rustic Mill",
+      "cuisine": "Farm-to-Table",
+      "rating": 4.9,
+      "location": "Napa Valley, CA",
+      "price": "$$$$",
+      "nextSlot": "9:00 PM",
+      "tags": [
+        "Organic",
+        "Premium"
+      ],
+      "image": "https://images.unsplash.com/photo-1552566626-52f8b828add9"
+    },
+    {
+      "id": "d2f1a3b4-1a2b-4c5d-8e9f-100000000010",
+      "name": "Kebab House",
+      "cuisine": "Turkish",
+      "rating": 4.4,
+      "location": "Paterson, NJ",
+      "price": "$$",
+      "nextSlot": "6:10 PM",
+      "tags": [
+        "Halal",
+        "Grill"
+      ],
+      "image": "https://images.unsplash.com/photo-1604908177225-6cbe5c7f97cb"
+    }
+  ],
+  "featuredAreas": [
+    {
+      "name": "Downtown",
+      "count": 12
+    },
+    {
+      "name": "Brooklyn",
+      "count": 9
+    },
+    {
+      "name": "Queens",
+      "count": 8
+    },
+    {
+      "name": "Marina",
+      "count": 6
+    }
+  ]
+}

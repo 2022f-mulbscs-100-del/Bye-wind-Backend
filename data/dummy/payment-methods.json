@@ -1,0 +1,7 @@
+{
+  "methods": [
+    { "id": "card", "label": "Credit/Debit Card" },
+    { "id": "wallet", "label": "Digital Wallet" },
+    { "id": "pay-later", "label": "Pay at restaurant" }
+  ]
+}

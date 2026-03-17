@@ -1,0 +1,9 @@
+{
+  "tables": [
+    { "id": "T1", "label": "Table 1", "seats": 2, "zone": "Indoor" },
+    { "id": "T2", "label": "Table 2", "seats": 4, "zone": "Indoor" },
+    { "id": "T3", "label": "Table 3", "seats": 4, "zone": "Outdoor" },
+    { "id": "T4", "label": "Table 4", "seats": 6, "zone": "Garden" },
+    { "id": "T5", "label": "Table 5", "seats": 2, "zone": "Bar" }
+  ]
+}

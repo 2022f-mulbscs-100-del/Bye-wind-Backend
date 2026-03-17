@@ -1,0 +1,19 @@
+{
+  "stats": {
+    "active": 118,
+    "suspended": 6,
+    "pending": 4
+  },
+  "tenants": [
+    { "name": "ByeWind Group", "outlets": 12, "status": "Active", "region": "US", "plan": "Enterprise" },
+    { "name": "Harbor Dining", "outlets": 4, "status": "Suspended", "region": "EU", "plan": "Pro" },
+    { "name": "Uptown Kitchens", "outlets": 7, "status": "Active", "region": "US", "plan": "Scale" }
+  ],
+  "alerts": {
+    "count": 2,
+    "message": "2 tenants require action."
+  },
+  "compliance": {
+    "message": "All active tenants compliant."
+  }
+}

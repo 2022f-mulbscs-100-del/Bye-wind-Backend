@@ -1,0 +1,758 @@
+// ══════════════════════════════════════════════════════════════════════
+// Prisma Schema — Restaurant Reservation Platform
+// Module: Onboarding & Setup (Sub-modules 1–16)
+// Database: PostgreSQL
+// ══════════════════════════════════════════════════════════════════════
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// ENUMS
+// ══════════════════════════════════════════════════════════════════════
+
+/// Sub-module 1 — Restaurant lifecycle status
+enum RestaurantStatus {
+  DRAFT           // Initial setup, not yet live
+  PENDING_REVIEW  // Submitted for admin review
+  LIVE            // Fully operational
+  SUSPENDED       // Temporarily disabled
+}
+
+/// Sub-module 8 — Staff roles for RBAC
+enum StaffRole {
+  SUPER_ADMIN  // Full access to ALL restaurants (platform-level)
+  OWNER        // Full access to their own restaurant (Owner/Admin)
+  HOST         // Access to reservations and guest management
+  STAFF        // Kitchen/Waitstaff — table and order management
+}
+
+/// Sub-module 3 — Days of the week
+enum DayOfWeek {
+  MONDAY
+  TUESDAY
+  WEDNESDAY
+  THURSDAY
+  FRIDAY
+  SATURDAY
+  SUNDAY
+}
+
+/// Sub-module 3 — Shift classifications
+enum ShiftType {
+  BREAKFAST
+  BRUNCH
+  LUNCH
+  DINNER
+  ALL_DAY
+}
+
+/// Sub-module 3 — Holiday/closure types
+enum HolidayType {
+  PUBLIC_HOLIDAY
+  SEASONAL_CLOSURE
+  ADHOC_BLACKOUT
+}
+
+/// Sub-module 4 — Seating zone classifications
+enum ZoneType {
+  INDOOR
+  OUTDOOR
+  BAR
+  PRIVATE_DINING
+  TERRACE
+  ROOFTOP
+}
+
+/// Sub-module 4 — Table shapes for the floor plan designer
+enum TableShape {
+  ROUND
+  SQUARE
+  RECTANGLE
+  OVAL
+  CUSTOM
+}
+
+/// Sub-module 6 — Meal types for turn time rules
+enum MealType {
+  BREAKFAST
+  BRUNCH
+  LUNCH
+  DINNER
+}
+
+/// Sub-module 9 — Supported payment gateways
+enum PaymentProvider {
+  STRIPE
+  SQUARE
+}
+
+/// Sub-module 10 — Communication channels
+enum ChannelType {
+  SMS
+  WHATSAPP
+  EMAIL
+}
+
+/// Sub-module 11 — POS system providers
+enum POSProvider {
+  TOAST
+  LIGHTSPEED
+  SQUARE_POS
+  CLOVER
+  REVEL
+  OTHER
+}
+
+/// Sub-module 11 — POS data sync direction
+enum SyncDirection {
+  INBOUND
+  OUTBOUND
+  BIDIRECTIONAL
+}
+
+/// Sub-module 12 — Import job lifecycle states
+enum ImportStatus {
+  PENDING
+  VALIDATING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+/// Sub-module 12 — Types of data that can be imported
+enum ImportType {
+  GUESTS
+  RESERVATIONS
+  TABLES
+}
+
+/// Sub-module 15 — Audit log action types
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  LOGIN
+  LOGOUT
+  EXPORT
+  STATUS_CHANGE
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// SUB-MODULE 1 — Restaurant Registration
+// ══════════════════════════════════════════════════════════════════════
+
+/// Root entity — one Restaurant = one master account (tenant)
+model Restaurant {
+  id                String           @id @default(uuid())
+
+  // Core identity
+  legalBusinessName String
+  brandName         String
+
+  // Location & locale
+  registeredAddress Json             // { street, city, state, zipCode, country }
+  operatingCountry  String
+  timezone          String           // e.g. "Asia/Kolkata"
+
+  // Business profile
+  cuisineTypes      String[]         // e.g. ["Italian", "Mediterranean"]
+  gstVatApplicable  Boolean          @default(false)
+  gstVatNumber      String?
+  planTier          String           @default("Starter")
+
+  // Contact
+  primaryContact    Json             // { name, email, phone, designation }
+  logoUrl           String?          // Stored in S3/Cloudinary
+
+  // Lifecycle
+  status            RestaurantStatus @default(DRAFT)
+  isActive          Boolean          @default(true)
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
+
+  // ── Relations ──────────────────────────────────────────────────────
+  branches              Branch[]
+  staff                 Staff[]
+  paymentGateways       PaymentGateway[]
+  communicationChannels CommunicationChannelConfig[]
+  posIntegrations       POSIntegration[]
+  dataImports           DataImport[]
+  branding              Branding?
+  bookingWidgets        BookingWidget[]
+  auditLogs             AuditLog[]
+  goLiveChecklist       GoLiveChecklist?
+
+  @@map("restaurants")
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// SUB-MODULE 2 — Multi-Branch / Location Setup
+// ══════════════════════════════════════════════════════════════════════
+
+/// Each branch is an independent location under one restaurant master account
+model Branch {
+  id           String   @id @default(uuid())
+  restaurantId String
+
+  // Identity
+  name         String
+  address      Json     // { street, city, state, zipCode, country }
+  timezone     String   // Branch can differ from restaurant timezone
+  phone        String?
+  email        String?
+
+  // Lifecycle
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  // ── Relations ──────────────────────────────────────────────────────
+  restaurant        Restaurant          @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  businessHours     BusinessHours[]
+  holidays          Holiday[]
+  floorPlans        FloorPlan[]
+  turnTimeRules     TurnTimeRule[]
+  reservationPolicy ReservationPolicy?
+  staffBranches     StaffBranch[]
+  posIntegrations   POSIntegration[]
+  bookingWidgets    BookingWidget[]
+  dataImports       DataImport[]
+  goLiveStatus      BranchGoLiveStatus?
+
+  @@map("branches")
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// SUB-MODULE 3 — Business Hours & Holiday Management
+// ══════════════════════════════════════════════════════════════════════
+
+/// Weekly operating schedule per branch — one row per day
+model BusinessHours {
+  id        String    @id @default(uuid())
+  branchId  String
+  dayOfWeek DayOfWeek
+  isOpen    Boolean   @default(true)
+  openTime  String?   // "09:00" — null when isOpen = false
+  closeTime String?   // "22:00"
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  branch Branch  @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  shifts Shift[]
+
+  @@unique([branchId, dayOfWeek]) // One record per day per branch
+  @@map("business_hours")
+}
+
+/// Split shift support (e.g., Lunch 12–15, Dinner 18–22) under a business hours record
+model Shift {
+  id              String    @id @default(uuid())
+  businessHoursId String
+  name            String    // e.g. "Lunch Service", "Dinner Service"
+  shiftType       ShiftType
+  startTime       String    // "11:30"
+  endTime         String    // "15:00"
+  isActive        Boolean   @default(true)
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  businessHours BusinessHours @relation(fields: [businessHoursId], references: [id], onDelete: Cascade)
+
+  @@map("shifts")
+}
+
+/// Public holidays, seasonal closures, and ad-hoc blackout dates per branch
+model Holiday {
+  id          String      @id @default(uuid())
+  branchId    String
+  name        String      // e.g. "Christmas Day", "Ramadan Closure"
+  startDate   DateTime
+  endDate     DateTime?   // null = single day; set for seasonal/range closures
+  type        HolidayType
+  description String?
+  isRecurring Boolean     @default(false) // Repeat annually
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  branch Branch @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@map("holidays")
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// SUB-MODULE 4 — Floor Plan Designer
+// ══════════════════════════════════════════════════════════════════════
+
+/// Named floor plan layout per branch (a branch can have multiple layouts)
+model FloorPlan {
+  id           String   @id @default(uuid())
+  branchId     String
+  name         String   // e.g. "Main Dining Room", "Rooftop"
+  description  String?
+  canvasWidth  Float    @default(800)  // px
+  canvasHeight Float    @default(600)  // px
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  branch Branch  @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  zones  Zone[]
+  tables Table[]
+
+  @@map("floor_plans")
+}
+
+/// Seating zones within a floor plan (Indoor, Outdoor, Bar, etc.)
+model Zone {
+  id          String   @id @default(uuid())
+  floorPlanId String
+  name        String   // e.g. "Indoor Section A"
+  type        ZoneType
+  color       String?  // Hex color for visual distinction in the designer
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  floorPlan FloorPlan @relation(fields: [floorPlanId], references: [id], onDelete: Cascade)
+  tables    Table[]
+
+  @@map("zones")
+}
+
+/// Individual table placed on the floor plan canvas
+model Table {
+  id          String     @id @default(uuid())
+  floorPlanId String
+  zoneId      String?
+  tableNumber String     // Unique identifier e.g. "T1", "B-05"
+  label       String?    // Display label override
+  shape       TableShape @default(SQUARE)
+  width       Float      @default(60)  // px
+  height      Float      @default(60)  // px
+  positionX   Float      @default(0)   // Canvas X coordinate
+  positionY   Float      @default(0)   // Canvas Y coordinate
+  rotation    Float      @default(0)   // Degrees (0–359)
+  capacity    Int        // Max seating capacity
+  isActive    Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  floorPlan   FloorPlan    @relation(fields: [floorPlanId], references: [id], onDelete: Cascade)
+  zone        Zone?        @relation(fields: [zoneId], references: [id], onDelete: SetNull)
+  tableConfig TableConfig?
+
+  @@unique([floorPlanId, tableNumber]) // Table numbers unique within a floor plan
+  @@map("tables")
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// SUB-MODULE 5 — Table Configuration Rules
+// ══════════════════════════════════════════════════════════════════════
+
+/// Advanced attributes for each table (party size rules, accessibility, VIP, tags)
+model TableConfig {
+  id             String   @id @default(uuid())
+  tableId        String   @unique
+  minPartySize   Int      @default(1)
+  maxPartySize   Int
+  isCombinable   Boolean  @default(false) // Can be merged with adjacent tables
+  combinableWith String[] // Array of Table IDs this table can combine with
+  isAccessible   Boolean  @default(false) // Wheelchair accessible
+  isVIP          Boolean  @default(false)
+  isSmoking      Boolean  @default(false)
+  preferredTags  String[] // e.g. ["window", "quiet", "romantic", "outdoor"]
+  notes          String?
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  table Table @relation(fields: [tableId], references: [id], onDelete: Cascade)
+
+  @@map("table_configs")
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// SUB-MODULE 6 — Turn Time & Dining Duration Rules
+// ══════════════════════════════════════════════════════════════════════
+
+/// Conditional turn time rules — evaluated by priority order to determine slot length
+model TurnTimeRule {
+  id           String     @id @default(uuid())
+  branchId     String
+  name         String?    // e.g. "Weekend Dinner Large Party"
+
+  // Condition filters (null = applies to all)
+  partySizeMin Int?
+  partySizeMax Int?
+  mealType     MealType?
+  dayOfWeek    DayOfWeek?
+  timeSlotFrom String?    // "12:00"
+  timeSlotTo   String?    // "14:00"
+
+  // Result
+  durationMins Int        // Dining duration in minutes
+  isDefault    Boolean    @default(false) // Fallback rule when no other matches
+  priority     Int        @default(0)     // Higher = evaluated first
+
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  branch Branch @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@map("turn_time_rules")
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// SUB-MODULE 7 — Reservation Policy Configuration
+// ══════════════════════════════════════════════════════════════════════
+
+/// Booking rules that govern availability engine and guest-facing booking flow
+model ReservationPolicy {
+  id                      String   @id @default(uuid())
+  branchId                String   @unique
+
+  // Party size
+  minPartySize            Int      @default(1)
+  maxPartySize            Int      @default(20)
+
+  // Booking window
+  advanceBookingDays      Int      @default(30)  // How far ahead guests can book
+  sameDayCutoffMins       Int      @default(60)  // Minutes before slot — no same-day bookings
+  minNoticeMins           Int      @default(30)  // Minimum notice required
+
+  // Capacity
+  overbookingTolerancePct Float    @default(0)   // e.g. 10 = allow 10% overbooking
+
+  // Deposits
+  depositRequired         Boolean  @default(false)
+  depositType             String?  // "FIXED" | "PER_HEAD" | "PERCENTAGE"
+  depositAmount           Float?
+
+  // Cancellation & no-show
+  cancellationWindowHours Int      @default(24)
+  noShowPenaltyEnabled    Boolean  @default(false)
+  noShowPenaltyAmount     Float?
+
+  // Modification
+  modificationLimitHours  Int      @default(24)
+
+  // Misc
+  autoConfirm             Boolean  @default(true)
+  maxBookingsPerSlot      Int?     // Null = unlimited
+  notes                   String?
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  branch Branch @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@map("reservation_policies")
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// SUB-MODULE 8 — Staff & Role Management
+// ══════════════════════════════════════════════════════════════════════
+
+/// Staff member — SUPER_ADMIN has null restaurantId (platform-wide), others belong to a restaurant
+model Staff {
+  id           String    @id @default(uuid())
+  restaurantId String?   // Nullable for SUPER_ADMIN (platform-level users)
+  email        String    @unique
+  passwordHash String
+  firstName    String
+  lastName     String
+  phone        String?
+  role         StaffRole
+  permissions  Json      @default("{}") // Granular permission overrides on top of role
+  isActive     Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  restaurant Restaurant?   @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  branches   StaffBranch[]
+  auditLogs  AuditLog[]
+
+  @@map("staff")
+}
+
+/// Junction table — Staff can be assigned to one or more branches
+model StaffBranch {
+  id        String   @id @default(uuid())
+  staffId   String
+  branchId  String
+  isPrimary Boolean  @default(false) // Primary working branch
+  createdAt DateTime @default(now())
+
+  staff  Staff  @relation(fields: [staffId], references: [id], onDelete: Cascade)
+  branch Branch @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@unique([staffId, branchId])
+  @@map("staff_branches")
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// SUB-MODULE 9 — Payment Gateway Setup
+// ══════════════════════════════════════════════════════════════════════
+
+/// Stripe / Square gateway configuration per restaurant
+/// IMPORTANT: apiKey, secretKey, webhookSecret are stored AES-encrypted
+model PaymentGateway {
+  id            String          @id @default(uuid())
+  restaurantId  String
+  provider      PaymentProvider
+  apiKey        String          // Encrypted at application layer
+  secretKey     String          // Encrypted at application layer
+  webhookSecret String?         // Encrypted at application layer
+  currency      String          @default("USD") // ISO 4217
+  isActive      Boolean         @default(false)
+  isTestMode    Boolean         @default(true)
+  taxRate       Float?          // Percentage e.g. 18.0
+  config        Json            @default("{}") // Provider-specific extra settings
+  createdAt     DateTime        @default(now())
+  updatedAt     DateTime        @updatedAt
+
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  @@unique([restaurantId, provider]) // One config per provider per restaurant
+  @@map("payment_gateways")
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// SUB-MODULE 10 — Communication Channel Configuration
+// ══════════════════════════════════════════════════════════════════════
+
+/// SMS / WhatsApp / Email provider configuration per restaurant
+/// IMPORTANT: apiKey, apiSecret are stored AES-encrypted
+model CommunicationChannelConfig {
+  id           String      @id @default(uuid())
+  restaurantId String
+  channel      ChannelType // SMS | WHATSAPP | EMAIL
+  provider     String      // "Twilio" | "SendGrid" | "MessageBird" | "Meta"
+  apiKey       String      // Encrypted
+  apiSecret    String?     // Encrypted
+  senderId     String      // Phone number or email address
+  fromName     String?     // Display name for outgoing messages
+  isActive     Boolean     @default(false)
+  isVerified   Boolean     @default(false) // OTP/domain verified
+  config       Json        @default("{}") // Provider-specific settings
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  @@unique([restaurantId, channel]) // One provider per channel per restaurant
+  @@map("communication_channel_configs")
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// SUB-MODULE 11 — POS Integration Setup
+// ══════════════════════════════════════════════════════════════════════
+
+/// Third-party POS system integration configuration
+/// IMPORTANT: apiKey, apiSecret are stored AES-encrypted
+model POSIntegration {
+  id                  String        @id @default(uuid())
+  restaurantId        String
+  branchId            String?       // Null = applies to all branches
+  provider            POSProvider
+  apiKey              String        // Encrypted
+  apiSecret           String?       // Encrypted
+  endpointUrl         String?       // Custom API endpoint if required
+  syncFrequencyMins   Int           @default(15)
+  syncDirection       SyncDirection @default(BIDIRECTIONAL)
+  isActive            Boolean       @default(false)
+  lastSyncAt          DateTime?
+  errorHandlingConfig Json          @default("{}") // Retry logic, alerting rules
+  fieldMappings       Json          @default("{}") // POS field → internal field map
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  branch     Branch?    @relation(fields: [branchId], references: [id], onDelete: SetNull)
+
+  @@map("pos_integrations")
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// SUB-MODULE 12 — Data Import & Migration
+// ══════════════════════════════════════════════════════════════════════
+
+/// Tracks CSV/Excel import jobs — guests, reservations, or table mappings
+model DataImport {
+  id               String       @id @default(uuid())
+  restaurantId     String
+  branchId         String?
+  importType       ImportType   // GUESTS | RESERVATIONS | TABLES
+  fileName         String       // Original uploaded file name
+  fileUrl          String       // S3 / Storage URL
+  status           ImportStatus @default(PENDING)
+  totalRows        Int?
+  processedRows    Int?
+  failedRows       Int?
+  mappingConfig    Json         @default("{}") // Column mapping: CSV header → DB field
+  previewData      Json?        // First N rows shown before confirming import
+  validationErrors Json?        // Per-row validation issues
+  importErrors     Json?        // Processing errors
+  completedAt      DateTime?
+  createdBy        String       // Staff.id who triggered the import
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
+
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  branch     Branch?    @relation(fields: [branchId], references: [id], onDelete: SetNull)
+
+  @@map("data_imports")
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// SUB-MODULE 13 — Branding & White-Label Configuration
+// ══════════════════════════════════════════════════════════════════════
+
+/// Brand identity and white-label settings — one record per restaurant
+model Branding {
+  id                String   @id @default(uuid())
+  restaurantId      String   @unique
+
+  // Visual identity
+  logoUrl           String?
+  faviconUrl        String?
+  primaryColor      String?  // Hex e.g. "#FF5733"
+  secondaryColor    String?
+  accentColor       String?
+  fontFamily        String?  // e.g. "Inter", "Playfair Display"
+
+  // Message templates
+  emailTemplates    Json     @default("{}") // { confirmation, reminder, cancellation, noShow, waitlist }
+  smsTemplates      Json     @default("{}")
+  whatsappTemplates Json     @default("{}")
+
+  // Widget & domain
+  widgetTheme       Json     @default("{}") // Booking widget appearance overrides
+  customCSSUrl      String?  // URL to a hosted custom CSS file
+  isWhiteLabel      Boolean  @default(false)
+  customDomain      String?  // e.g. "book.myrestaurant.com"
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  @@map("branding")
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// SUB-MODULE 14 — Booking Widget Configuration / API Integration
+// ══════════════════════════════════════════════════════════════════════
+
+/// Embeddable booking widget config — inherits policies from core reservation system
+model BookingWidget {
+  id             String   @id @default(uuid())
+  restaurantId   String
+  branchId       String?  // Null = restaurant-level widget
+  name           String   // e.g. "Website Widget", "Instagram Widget"
+  language       String   @default("en") // BCP-47 language code
+  timezone       String?  // Overrides branch timezone for display
+  minPartySize   Int      @default(1)
+  maxPartySize   Int      @default(20)
+  availableZones String[] // Zone IDs to expose in the widget
+  bookingRules   Json     @default("{}") // Overrides from core reservation policy
+  embedToken     String   @unique @default(uuid()) // Public embed key
+  customStyles   Json     @default("{}") // Per-widget CSS variable overrides
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  branch     Branch?    @relation(fields: [branchId], references: [id], onDelete: SetNull)
+
+  @@map("booking_widgets")
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// SUB-MODULE 15 — Audit Logs & Change Tracking
+// ══════════════════════════════════════════════════════════════════════
+
+/// Immutable audit trail — auto-populated via Prisma middleware for all mutations
+model AuditLog {
+  id           String      @id @default(uuid())
+  restaurantId String?
+  staffId      String?
+  entity       String      // Model name e.g. "Restaurant", "Table", "ReservationPolicy"
+  entityId     String      // ID of the changed record
+  action       AuditAction // CREATE | UPDATE | DELETE | LOGIN | LOGOUT | etc.
+  oldValue     Json?       // Snapshot before change
+  newValue     Json?       // Snapshot after change
+  metadata     Json?       // Extra context e.g. { "reason": "admin override" }
+  ipAddress    String?
+  userAgent    String?
+  createdAt    DateTime    @default(now())
+
+  restaurant Restaurant? @relation(fields: [restaurantId], references: [id], onDelete: SetNull)
+  staff      Staff?      @relation(fields: [staffId], references: [id], onDelete: SetNull)
+
+  @@index([restaurantId, entity, entityId]) // Fast lookup by resource
+  @@index([staffId])                        // Fast lookup by who made the change
+  @@index([createdAt])                      // Time-range queries
+  @@map("audit_logs")
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// SUB-MODULE 16 — Go-Live Checklist & Validation
+// ══════════════════════════════════════════════════════════════════════
+
+/// Restaurant-level go-live readiness tracker
+/// Restaurant.status flips to LIVE only when isLive = true here
+model GoLiveChecklist {
+  id                    String    @id @default(uuid())
+  restaurantId          String    @unique
+
+  // ── Step completion flags ──────────────────────────────────────────
+  restaurantProfileDone Boolean   @default(false) // Sub-module 1
+  branchSetupDone       Boolean   @default(false) // Sub-module 2
+  businessHoursDone     Boolean   @default(false) // Sub-module 3
+  floorPlanDone         Boolean   @default(false) // Sub-module 4
+  tablesConfiguredDone  Boolean   @default(false) // Sub-modules 4+5
+  turnTimesDone         Boolean   @default(false) // Sub-module 6
+  reservationPolicyDone Boolean   @default(false) // Sub-module 7
+  staffSetupDone        Boolean   @default(false) // Sub-module 8
+  paymentConfiguredDone Boolean   @default(false) // Sub-module 9
+  communicationDone     Boolean   @default(false) // Sub-module 10
+  brandingDone          Boolean   @default(false) // Sub-module 13
+
+  // ── Computed ──────────────────────────────────────────────────────
+  completionPercentage  Float     @default(0)   // 0–100, recalculated on each update
+  isLive                Boolean   @default(false)
+  wentLiveAt            DateTime?
+  lastCheckedAt         DateTime?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  @@map("go_live_checklists")
+}
+
+/// Branch-level readiness tracker (each branch must independently be configured)
+model BranchGoLiveStatus {
+  id                    String   @id @default(uuid())
+  branchId              String   @unique
+  businessHoursDone     Boolean  @default(false)
+  floorPlanDone         Boolean  @default(false)
+  tablesConfiguredDone  Boolean  @default(false)
+  reservationPolicyDone Boolean  @default(false)
+  turnTimesDone         Boolean  @default(false)
+  completionPercentage  Float    @default(0)
+  isReady               Boolean  @default(false)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  branch Branch @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@map("branch_go_live_status")
+}

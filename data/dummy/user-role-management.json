@@ -1,0 +1,7 @@
+{
+  "users": [
+    { "name": "Ava Collins", "role": "Tenant Admin", "tenant": "ByeWind", "status": "Active" },
+    { "name": "Liam Patel", "role": "Finance Admin", "tenant": "Harbor", "status": "Suspended" },
+    { "name": "Maya Brooks", "role": "Ops Lead", "tenant": "Uptown", "status": "Active" }
+  ]
+}

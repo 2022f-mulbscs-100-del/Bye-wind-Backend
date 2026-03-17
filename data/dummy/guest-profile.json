@@ -1,0 +1,107 @@
+{
+  "profile": {
+    "name": "Maya Carter",
+    "email": "maya.carter@email.com",
+    "phone": "+1 (555) 123-4567",
+    "location": "San Francisco, CA",
+    "memberSince": "January 2023",
+    "totalBookings": 28,
+    "avatar": ""
+  },
+  "upcomingBookings": [
+    {
+      "id": "b1",
+      "restaurantName": "ByeWind Downtown",
+      "date": "2024-02-15",
+      "time": "7:30 PM",
+      "guests": 4,
+      "status": "confirmed",
+      "table": "Table 12",
+      "paymentStatus": "paid",
+      "paymentMethod": "Credit card",
+      "amount": 86,
+      "reference": "BW-RES-29831"
+    },
+    {
+      "id": "b2",
+      "restaurantName": "Uptown Garden",
+      "date": "2024-02-17",
+      "time": "6:00 PM",
+      "guests": 2,
+      "status": "confirmed",
+      "table": "Table 6",
+      "paymentStatus": "pay_later",
+      "paymentMethod": "Pay at restaurant",
+      "amount": 54,
+      "reference": "BW-RES-29854"
+    },
+    {
+      "id": "b3",
+      "restaurantName": "Marina Harbor",
+      "date": "2024-02-20",
+      "time": "8:00 PM",
+      "guests": 6,
+      "status": "pending",
+      "table": "Table 18",
+      "paymentStatus": "paid",
+      "paymentMethod": "Digital wallet",
+      "amount": 140,
+      "reference": "BW-RES-29902"
+    }
+  ],
+  "savedRestaurants": [
+    {
+      "id": "s1",
+      "restaurantId": "c1a1b1a0-0c1e-4f2f-8f4c-1a4444444444",
+      "name": "Marina Harbor",
+      "cuisine": "Seafood",
+      "rating": 4.8,
+      "priceRange": "$$$"
+    },
+    {
+      "id": "s2",
+      "restaurantId": "c1a1b1a0-0c1e-4f2f-8f4c-1a1111111111",
+      "name": "ByeWind Downtown",
+      "cuisine": "Modern American",
+      "rating": 4.6,
+      "priceRange": "$$"
+    },
+    {
+      "id": "s3",
+      "restaurantId": "c1a1b1a0-0c1e-4f2f-8f4c-1a5555555555",
+      "name": "Uptown Garden",
+      "cuisine": "Italian",
+      "rating": 4.7,
+      "priceRange": "$$$"
+    },
+    {
+      "id": "s4",
+      "restaurantId": "c1a1b1a0-0c1e-4f2f-8f4c-1a8888888888",
+      "name": "Sakura Sushi Bar",
+      "cuisine": "Japanese",
+      "rating": 4.9,
+      "priceRange": "$$$$"
+    }
+  ],
+  "recentVisits": [
+    {
+      "restaurantName": "The Golden Spoon",
+      "visitDate": "Jan 28, 2024",
+      "rating": 5
+    },
+    {
+      "restaurantName": "Cafe Lumiere",
+      "visitDate": "Jan 15, 2024",
+      "rating": 4
+    },
+    {
+      "restaurantName": "Harbor Catch",
+      "visitDate": "Jan 03, 2024",
+      "rating": 5
+    }
+  ],
+  "preferences": {
+    "dietaryRestrictions": ["Vegan-friendly", "Low sodium"],
+    "favoriteCuisines": ["Italian", "Seafood", "Japanese"]
+  }
+}

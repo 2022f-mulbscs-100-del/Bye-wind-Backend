@@ -1,0 +1,1346 @@
+{
+  "restaurants": [
+    {
+      "id": "c1a1b1a0-0c1e-4f2f-8f4c-1a1111111111",
+      "name": "Skyline Bistro",
+      "cuisine": "Continental",
+      "rating": 4.6,
+      "location": "122 Hudson Ave, New York, NY",
+      "phone": "(212) 555-1044",
+      "hours": "11:00 AM - 11:00 PM",
+      "description": "City skyline dining with a seasonal continental menu and rooftop seating.",
+      "images": [
+        "https://images.unsplash.com/photo-1517457373614-b7152f800fd1?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1555939594-58d7cb561682?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1504674900152-b8d9bcbd149b?w=800&h=600&fit=crop"
+      ],
+      "menu": [
+        {
+          "name": "Pan-Seared Salmon",
+          "price": "$28",
+          "description": "Fresh salmon with seasonal vegetables"
+        },
+        {
+          "name": "Wagyu Beef Steak",
+          "price": "$45",
+          "description": "Premium Japanese wagyu with truffle sauce"
+        },
+        {
+          "name": "Roasted Duck Breast",
+          "price": "$32",
+          "description": "Cherry gastrique and wild mushrooms"
+        },
+        {
+          "name": "Vegetable Risotto",
+          "price": "$18",
+          "description": "Creamy arborio rice with seasonal veggies"
+        }
+      ],
+      "reviews": [
+        {
+          "author": "Sarah M.",
+          "rating": 5,
+          "text": "Incredible rooftop views and amazing food. The service was impeccable!"
+        },
+        {
+          "author": "John D.",
+          "rating": 4,
+          "text": "Great ambiance and well-prepared dishes. A bit pricey but worth it."
+        }
+      ],
+      "image": "https://images.unsplash.com/photo-1528605248644-14dd04022da1"
+    },
+    {
+      "id": "c1a1b1a0-0c1e-4f2f-8f4c-1a2222222222",
+      "name": "Spice Route",
+      "cuisine": "South Asian",
+      "rating": 4.8,
+      "location": "48 Jackson Ave, Queens, NY",
+      "phone": "(718) 555-7788",
+      "hours": "12:00 PM - 10:30 PM",
+      "description": "Bold South Asian flavors, halal-certified kitchen, and shareable platters.",
+      "images": [
+        "https://images.unsplash.com/photo-1585521537478-37dfd6a33d1e?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=800&h=600&fit=crop"
+      ],
+      "menu": [
+        {
+          "name": "Butter Chicken Curry",
+          "price": "$16",
+          "description": "Tender chicken in creamy tomato sauce"
+        },
+        {
+          "name": "Lamb Biryani",
+          "price": "$18",
+          "description": "Fragrant basmati rice with tender lamb"
+        },
+        {
+          "name": "Palak Paneer",
+          "price": "$14",
+          "description": "Cottage cheese in spinach curry"
+        },
+        {
+          "name": "Tandoori Naan Platter",
+          "price": "$12",
+          "description": "Three types of naan with dips"
+        }
+      ],
+      "reviews": [
+        {
+          "author": "Priya K.",
+          "rating": 5,
+          "text": "Authentic South Asian cuisine! The butter chicken is addictive."
+        },
+        {
+          "author": "Ahmed H.",
+          "rating": 5,
+          "text": "Halal-certified and absolutely delicious. Must try the biryani!"
+        }
+      ],
+      "image": "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe"
+    },
+    {
+      "id": "c1a1b1a0-0c1e-4f2f-8f4c-1a3333333333",
+      "name": "Green Leaf Café",
+      "cuisine": "Vegan",
+      "rating": 4.5,
+      "location": "9 Bedford Ave, Brooklyn, NY",
+      "phone": "(347) 555-3920",
+      "hours": "9:00 AM - 9:00 PM",
+      "description": "Plant-based cafe with organic bowls, cold-pressed juices, and pastries.",
+      "images": [
+        "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&h=600&fit=crop"
+      ],
+      "menu": [
+        {
+          "name": "Buddha Bowl",
+          "price": "$14",
+          "description": "Quinoa, roasted veggies, tahini dressing"
+        },
+        {
+          "name": "Açai Berry Bowl",
+          "price": "$12",
+          "description": "Topped with granola, coconut, berries"
+        },
+        {
+          "name": "Green Detox Juice",
+          "price": "$8",
+          "description": "Kale, apple, ginger, spirulina"
+        },
+        {
+          "name": "Vegan Chocolate Cake",
+          "price": "$7",
+          "description": "Dairy-free and naturally sweetened"
+        }
+      ],
+      "reviews": [
+        {
+          "author": "Lisa E.",
+          "rating": 5,
+          "text": "Best vegan café in Brooklyn! Everything is fresh and delicious."
+        },
+        {
+          "author": "Tom R.",
+          "rating": 4,
+          "text": "Great healthy options and friendly service."
+        }
+      ],
+      "image": "https://images.unsplash.com/photo-1498837167922-ddd27525d352"
+    },
+    {
+      "id": "c1a1b1a0-0c1e-4f2f-8f4c-1a4444444444",
+      "name": "Harbor Catch",
+      "cuisine": "Seafood",
+      "rating": 4.7,
+      "location": "410 Marina Blvd, Marina, CA",
+      "phone": "(831) 555-4411",
+      "hours": "12:00 PM - 10:00 PM",
+      "description": "Fresh coastal seafood with waterfront views and curated wine pairings.",
+      "images": [
+        "https://images.unsplash.com/photo-1535382519023-15a6e2b0f0a0?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1504674900152-b8d9bcbd149b?w=800&h=600&fit=crop"
+      ],
+      "menu": [
+        {
+          "name": "Grilled Lobster Tail",
+          "price": "$48",
+          "description": "Garlic butter and seasonal greens"
+        },
+        {
+          "name": "Seared Scallops",
+          "price": "$32",
+          "description": "Lemon beurre blanc and microgreens"
+        },
+        {
+          "name": "Whole Roasted Fish",
+          "price": "$38",
+          "description": "Mediterranean herbs and citrus"
+        },
+        {
+          "name": "Shrimp Risotto",
+          "price": "$24",
+          "description": "Saffron risotto with jumbo shrimp"
+        }
+      ],
+      "reviews": [
+        {
+          "author": "Michael C.",
+          "rating": 5,
+          "text": "Waterfront dining at its finest. Fresh fish and perfect wine pairings!"
+        },
+        {
+          "author": "Grace W.",
+          "rating": 4,
+          "text": "Beautiful views and excellent seafood. Service was attentive."
+        }
+      ],
+      "image": "https://images.unsplash.com/photo-1504674900247-0877df9cc836"
+    },
+    {
+      "id": "c1a1b1a0-0c1e-4f2f-8f4c-1a5555555555",
+      "name": "Uptown Garden",
+      "cuisine": "Italian",
+      "rating": 4.8,
+      "location": "98 Oak Ave, Oakland, CA",
+      "phone": "(510) 555-8192",
+      "hours": "12:00 PM - 10:00 PM",
+      "description": "Wood-fired Italian favorites in a lush indoor garden setting.",
+      "images": [
+        "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1555939594-58d7cb561682?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1504674900152-b8d9bcbd149b?w=800&h=600&fit=crop"
+      ],
+      "menu": [
+        {
+          "name": "Wood-Fired Margherita Pizza",
+          "price": "$16",
+          "description": "Fresh mozzarella, basil, San Marzano tomatoes"
+        },
+        {
+          "name": "Handmade Pappardelle",
+          "price": "$22",
+          "description": "Wild boar ragù and parmesan"
+        },
+        {
+          "name": "Risotto ai Funghi",
+          "price": "$18",
+          "description": "Mushroom risotto with truffle oil"
+        },
+        {
+          "name": "Osso Buco",
+          "price": "$36",
+          "description": "Braised veal shank with gremolata"
+        }
+      ],
+      "reviews": [
+        {
+          "author": "Rosa V.",
+          "rating": 5,
+          "text": "Authentic Italian cuisine with a beautiful garden ambiance. Simply wonderful!"
+        },
+        {
+          "author": "Marco G.",
+          "rating": 5,
+          "text": "The wood-fired pizzas are incredible. Felt like dining in Italy!"
+        }
+      ],
+      "image": "https://images.unsplash.com/photo-1555396273-367ea4eb4db5"
+    },
+    {
+      "id": "c1a1b1a0-0c1e-4f2f-8f4c-1a6666666666",
+      "name": "Fire & Stone",
+      "cuisine": "Steakhouse",
+      "rating": 4.9,
+      "location": "330 Madison Ave, New York, NY",
+      "phone": "(212) 555-9920",
+      "hours": "4:00 PM - 11:30 PM",
+      "description": "Premium steaks, craft cocktails, and a classic upscale ambiance.",
+      "images": [
+        "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1555939594-58d7cb561682?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1504674900152-b8d9bcbd149b?w=800&h=600&fit=crop"
+      ],
+      "menu": [
+        {
+          "name": "Prime Ribeye",
+          "price": "$65",
+          "description": "16oz dry-aged prime ribeye with roasted garlic"
+        },
+        {
+          "name": "Filet Mignon",
+          "price": "$72",
+          "description": "Tender center cut with port wine reduction"
+        },
+        {
+          "name": "New York Strip",
+          "price": "$58",
+          "description": "Classic 14oz cut with herb butter"
+        },
+        {
+          "name": "Surf & Turf",
+          "price": "$78",
+          "description": "Filet mignon with Maine lobster tail"
+        }
+      ],
+      "reviews": [
+        {
+          "author": "David K.",
+          "rating": 5,
+          "text": "The best steakhouse in NYC. Premium quality meat and impeccable service."
+        },
+        {
+          "author": "Jennifer P.",
+          "rating": 5,
+          "text": "Classic elegance and perfectly cooked steaks. Worth every penny!"
+        }
+      ],
+      "image": "https://images.unsplash.com/photo-1600891964599-f61ba0e24092"
+    },
+    {
+      "id": "c1a1b1a0-0c1e-4f2f-8f4c-1a7777777777",
+      "name": "Morning Dew",
+      "cuisine": "Breakfast",
+      "rating": 4.4,
+      "location": "25 Congress Ave, Austin, TX",
+      "phone": "(512) 555-3388",
+      "hours": "7:00 AM - 2:00 PM",
+      "description": "All-day breakfast and brunch with fresh-baked pastries and coffee.",
+      "images": [
+        "https://images.unsplash.com/photo-1495521821757-a1efb6729352?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1541519227354-08fa5d50c44d?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=800&h=600&fit=crop"
+      ],
+      "menu": [
+        {
+          "name": "Eggs Benedict",
+          "price": "$12",
+          "description": "Poached eggs, Canadian bacon, hollandaise"
+        },
+        {
+          "name": "Belgian Waffle",
+          "price": "$11",
+          "description": "Topped with fresh berries and whipped cream"
+        },
+        {
+          "name": "Avocado Toast",
+          "price": "$10",
+          "description": "Smashed avocado on whole grain with egg"
+        },
+        {
+          "name": "Croissant",
+          "price": "$5",
+          "description": "Fresh baked butter croissant"
+        }
+      ],
+      "reviews": [
+        {
+          "author": "Emily T.",
+          "rating": 5,
+          "text": "Best breakfast spot in Austin! The pastries are fresh and the coffee is excellent."
+        },
+        {
+          "author": "Brandon M.",
+          "rating": 4,
+          "text": "Great brunch place with friendly staff and delicious food."
+        }
+      ],
+      "image": "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085"
+    },
+    {
+      "id": "c1a1b1a0-0c1e-4f2f-8f4c-1a8888888888",
+      "name": "Tokyo Street",
+      "cuisine": "Japanese",
+      "rating": 4.7,
+      "location": "66 Market St, San Jose, CA",
+      "phone": "(408) 555-7011",
+      "hours": "12:00 PM - 10:00 PM",
+      "description": "Sushi, ramen, and izakaya bites with an open kitchen bar.",
+      "images": [
+        "https://images.unsplash.com/photo-1579584425555-c3ce17fd4351?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1504674900152-b8d9bcbd149b?w=800&h=600&fit=crop"
+      ],
+      "menu": [
+        {
+          "name": "Salmon Sashimi Platter",
+          "price": "$22",
+          "description": "10 pieces of premium sashimi"
+        },
+        {
+          "name": "Tonkotsu Ramen",
+          "price": "$14",
+          "description": "Rich pork bone broth with noodles"
+        },
+        {
+          "name": "Dragon Roll",
+          "price": "$18",
+          "description": "Eel, avocado, cucumber with eel sauce"
+        },
+        {
+          "name": "Gyoza",
+          "price": "$8",
+          "description": "Six pan-fried dumplings"
+        }
+      ],
+      "reviews": [
+        {
+          "author": "Kenji Y.",
+          "rating": 5,
+          "text": "Authentic Japanese cuisine with excellent sushi and ramen!"
+        },
+        {
+          "author": "Sofia A.",
+          "rating": 4,
+          "text": "Great atmosphere and delicious food. The chef is talented!"
+        }
+      ],
+      "image": "https://images.unsplash.com/photo-1553621042-f6e147245754"
+    },
+    {
+      "id": "c1a1b1a0-0c1e-4f2f-8f4c-1a9999999999",
+      "name": "El Camino",
+      "cuisine": "Mexican",
+      "rating": 4.5,
+      "location": "44 Harbor Dr, San Diego, CA",
+      "phone": "(619) 555-6422",
+      "hours": "11:00 AM - 10:00 PM",
+      "description": "Modern Mexican with street tacos, mezcal flights, and a patio bar.",
+      "images": [
+        "https://images.unsplash.com/photo-1565299585323-38d6b0865b47?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1504674900152-b8d9bcbd149b?w=800&h=600&fit=crop"
+      ],
+      "menu": [
+        {
+          "name": "Carne Asada Tacos",
+          "price": "$13",
+          "description": "Three tacos with grilled beef and pico de gallo"
+        },
+        {
+          "name": "Ceviche",
+          "price": "$15",
+          "description": "Fresh fish with lime juice and avocado"
+        },
+        {
+          "name": "Chiles Rellenos",
+          "price": "$18",
+          "description": "Poblano pepper stuffed with cheese"
+        },
+        {
+          "name": "Churros",
+          "price": "$6",
+          "description": "Crispy churros with chocolate sauce"
+        }
+      ],
+      "reviews": [
+        {
+          "author": "Carlos L.",
+          "rating": 5,
+          "text": "Authentic Mexican food that tastes like home! The tacos are amazing."
+        },
+        {
+          "author": "Isabella R.",
+          "rating": 4,
+          "text": "Great mezcal selection and delicious food. Love the patio!"
+        }
+      ],
+      "image": "https://images.unsplash.com/photo-1601924638867-3ec62f6c06c0"
+    },
+    {
+      "id": "c1a1b1a0-0c1e-4f2f-8f4c-1b0000000000",
+      "name": "Golden Wok",
+      "cuisine": "Chinese",
+      "rating": 4.3,
+      "location": "818 Central Ave, Fremont, CA",
+      "phone": "(510) 555-7744",
+      "hours": "11:00 AM - 9:30 PM",
+      "description": "Classic Chinese comfort dishes with handmade noodles and dumplings.",
+      "images": [
+        "https://images.unsplash.com/photo-1606787620999-dff72b36be90?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=800&h=600&fit=crop",
+        "https://images.unsplash.com/photo-1504674900152-b8d9bcbd149b?w=800&h=600&fit=crop"
+      ],
+      "menu": [
+        {
+          "name": "Mapo Tofu",
+          "price": "$10",
+          "description": "Silken tofu with spicy ground pork sauce"
+        },
+        {
+          "name": "Kung Pao Chicken",
+          "price": "$12",
+          "description": "Tender chicken with peanuts and peppers"
+        },
+        {
+          "name": "Hand-Pulled Noodles",
+          "price": "$9",
+          "description": "Chewy noodles in savory broth"
+        },
+        {
+          "name": "Pork Dumplings",
+          "price": "$8",
+          "description": "Six handmade dumplings"
+        }
+      ],
+      "reviews": [
+        {
+          "author": "Wei C.",
+          "rating": 5,
+          "text": "Authentic Chinese cooking! The handmade noodles are incredible."
+        },
+        {
+          "author": "Linda H.",
+          "rating": 4,
+          "text": "Great food and generous portions. A hidden gem!"
+        }
+      ],
+      "image": "https://images.unsplash.com/photo-1544025162-d76694265947"
+    }
+  ],
+  "detailsById": {
+    "c1a1b1a0-0c1e-4f2f-8f4c-1a1111111111": {
+      "floorHighlights": [
+        {
+          "label": "Indoor",
+          "value": "18 tables"
+        },
+        {
+          "label": "Bar",
+          "value": "8 tables"
+        },
+        {
+          "label": "Garden",
+          "value": "6 seats"
+        }
+      ],
+      "floorTables": [
+        {
+          "id": "t1",
+          "x": 40,
+          "y": 40,
+          "w": 70,
+          "h": 70,
+          "label": "T1"
+        },
+        {
+          "id": "t2",
+          "x": 140,
+          "y": 40,
+          "w": 90,
+          "h": 60,
+          "label": "T2"
+        },
+        {
+          "id": "t3",
+          "x": 260,
+          "y": 40,
+          "w": 110,
+          "h": 60,
+          "label": "Bar"
+        },
+        {
+          "id": "t4",
+          "x": 60,
+          "y": 140,
+          "w": 70,
+          "h": 70,
+          "label": "T3"
+        },
+        {
+          "id": "t5",
+          "x": 170,
+          "y": 140,
+          "w": 90,
+          "h": 70,
+          "label": "T4"
+        },
+        {
+          "id": "t6",
+          "x": 300,
+          "y": 140,
+          "w": 80,
+          "h": 80,
+          "label": "T5"
+        }
+      ],
+      "upcoming": [
+        {
+          "name": "4:00 PM",
+          "status": "Available"
+        },
+        {
+          "name": "5:30 PM",
+          "status": "Limited"
+        },
+        {
+          "name": "6:00 PM",
+          "status": "Available"
+        },
+        {
+          "name": "7:30 PM",
+          "status": "Full"
+        }
+      ]
+    },
+    "c1a1b1a0-0c1e-4f2f-8f4c-1a2222222222": {
+      "floorHighlights": [
+        {
+          "label": "Outdoor",
+          "value": "20 tables"
+        },
+        {
+          "label": "Private",
+          "value": "10 tables"
+        },
+        {
+          "label": "Patio",
+          "value": "8 seats"
+        }
+      ],
+      "floorTables": [
+        {
+          "id": "t1",
+          "x": 48,
+          "y": 45,
+          "w": 70,
+          "h": 70,
+          "label": "T1"
+        },
+        {
+          "id": "t2",
+          "x": 148,
+          "y": 45,
+          "w": 90,
+          "h": 60,
+          "label": "T2"
+        },
+        {
+          "id": "t3",
+          "x": 268,
+          "y": 45,
+          "w": 110,
+          "h": 60,
+          "label": "Bar"
+        },
+        {
+          "id": "t4",
+          "x": 68,
+          "y": 145,
+          "w": 70,
+          "h": 70,
+          "label": "T3"
+        },
+        {
+          "id": "t5",
+          "x": 178,
+          "y": 145,
+          "w": 90,
+          "h": 70,
+          "label": "T4"
+        },
+        {
+          "id": "t6",
+          "x": 308,
+          "y": 145,
+          "w": 80,
+          "h": 80,
+          "label": "T5"
+        }
+      ],
+      "upcoming": [
+        {
+          "name": "5:00 PM",
+          "status": "Available"
+        },
+        {
+          "name": "6:30 PM",
+          "status": "Limited"
+        },
+        {
+          "name": "7:00 PM",
+          "status": "Available"
+        },
+        {
+          "name": "8:30 PM",
+          "status": "Full"
+        }
+      ]
+    },
+    "c1a1b1a0-0c1e-4f2f-8f4c-1a3333333333": {
+      "floorHighlights": [
+        {
+          "label": "Bar",
+          "value": "22 tables"
+        },
+        {
+          "label": "Garden",
+          "value": "12 tables"
+        },
+        {
+          "label": "Rooftop",
+          "value": "10 seats"
+        }
+      ],
+      "floorTables": [
+        {
+          "id": "t1",
+          "x": 56,
+          "y": 40,
+          "w": 70,
+          "h": 70,
+          "label": "T1"
+        },
+        {
+          "id": "t2",
+          "x": 156,
+          "y": 40,
+          "w": 90,
+          "h": 60,
+          "label": "T2"
+        },
+        {
+          "id": "t3",
+          "x": 276,
+          "y": 40,
+          "w": 110,
+          "h": 60,
+          "label": "Bar"
+        },
+        {
+          "id": "t4",
+          "x": 76,
+          "y": 140,
+          "w": 70,
+          "h": 70,
+          "label": "T3"
+        },
+        {
+          "id": "t5",
+          "x": 186,
+          "y": 140,
+          "w": 90,
+          "h": 70,
+          "label": "T4"
+        },
+        {
+          "id": "t6",
+          "x": 316,
+          "y": 140,
+          "w": 80,
+          "h": 80,
+          "label": "T5"
+        }
+      ],
+      "upcoming": [
+        {
+          "name": "4:00 PM",
+          "status": "Available"
+        },
+        {
+          "name": "5:30 PM",
+          "status": "Limited"
+        },
+        {
+          "name": "6:00 PM",
+          "status": "Available"
+        },
+        {
+          "name": "7:30 PM",
+          "status": "Full"
+        }
+      ]
+    },
+    "c1a1b1a0-0c1e-4f2f-8f4c-1a4444444444": {
+      "floorHighlights": [
+        {
+          "label": "Private",
+          "value": "24 tables"
+        },
+        {
+          "label": "Patio",
+          "value": "14 tables"
+        },
+        {
+          "label": "Sushi bar",
+          "value": "12 seats"
+        }
+      ],
+      "floorTables": [
+        {
+          "id": "t1",
+          "x": 40,
+          "y": 45,
+          "w": 70,
+          "h": 70,
+          "label": "T1"
+        },
+        {
+          "id": "t2",
+          "x": 140,
+          "y": 45,
+          "w": 90,
+          "h": 60,
+          "label": "T2"
+        },
+        {
+          "id": "t3",
+          "x": 260,
+          "y": 45,
+          "w": 110,
+          "h": 60,
+          "label": "Bar"
+        },
+        {
+          "id": "t4",
+          "x": 60,
+          "y": 145,
+          "w": 70,
+          "h": 70,
+          "label": "T3"
+        },
+        {
+          "id": "t5",
+          "x": 170,
+          "y": 145,
+          "w": 90,
+          "h": 70,
+          "label": "T4"
+        },
+        {
+          "id": "t6",
+          "x": 300,
+          "y": 145,
+          "w": 80,
+          "h": 80,
+          "label": "T5"
+        }
+      ],
+      "upcoming": [
+        {
+          "name": "5:00 PM",
+          "status": "Available"
+        },
+        {
+          "name": "6:30 PM",
+          "status": "Limited"
+        },
+        {
+          "name": "7:00 PM",
+          "status": "Available"
+        },
+        {
+          "name": "8:30 PM",
+          "status": "Full"
+        }
+      ]
+    },
+    "c1a1b1a0-0c1e-4f2f-8f4c-1a5555555555": {
+      "floorHighlights": [
+        {
+          "label": "Garden",
+          "value": "26 tables"
+        },
+        {
+          "label": "Rooftop",
+          "value": "16 tables"
+        },
+        {
+          "label": "Indoor",
+          "value": "6 seats"
+        }
+      ],
+      "floorTables": [
+        {
+          "id": "t1",
+          "x": 48,
+          "y": 40,
+          "w": 70,
+          "h": 70,
+          "label": "T1"
+        },
+        {
+          "id": "t2",
+          "x": 148,
+          "y": 40,
+          "w": 90,
+          "h": 60,
+          "label": "T2"
+        },
+        {
+          "id": "t3",
+          "x": 268,
+          "y": 40,
+          "w": 110,
+          "h": 60,
+          "label": "Bar"
+        },
+        {
+          "id": "t4",
+          "x": 68,
+          "y": 140,
+          "w": 70,
+          "h": 70,
+          "label": "T3"
+        },
+        {
+          "id": "t5",
+          "x": 178,
+          "y": 140,
+          "w": 90,
+          "h": 70,
+          "label": "T4"
+        },
+        {
+          "id": "t6",
+          "x": 308,
+          "y": 140,
+          "w": 80,
+          "h": 80,
+          "label": "T5"
+        }
+      ],
+      "upcoming": [
+        {
+          "name": "4:00 PM",
+          "status": "Available"
+        },
+        {
+          "name": "5:30 PM",
+          "status": "Limited"
+        },
+        {
+          "name": "6:00 PM",
+          "status": "Available"
+        },
+        {
+          "name": "7:30 PM",
+          "status": "Full"
+        }
+      ]
+    },
+    "c1a1b1a0-0c1e-4f2f-8f4c-1a6666666666": {
+      "floorHighlights": [
+        {
+          "label": "Patio",
+          "value": "28 tables"
+        },
+        {
+          "label": "Sushi bar",
+          "value": "8 tables"
+        },
+        {
+          "label": "Outdoor",
+          "value": "8 seats"
+        }
+      ],
+      "floorTables": [
+        {
+          "id": "t1",
+          "x": 56,
+          "y": 45,
+          "w": 70,
+          "h": 70,
+          "label": "T1"
+        },
+        {
+          "id": "t2",
+          "x": 156,
+          "y": 45,
+          "w": 90,
+          "h": 60,
+          "label": "T2"
+        },
+        {
+          "id": "t3",
+          "x": 276,
+          "y": 45,
+          "w": 110,
+          "h": 60,
+          "label": "Bar"
+        },
+        {
+          "id": "t4",
+          "x": 76,
+          "y": 145,
+          "w": 70,
+          "h": 70,
+          "label": "T3"
+        },
+        {
+          "id": "t5",
+          "x": 186,
+          "y": 145,
+          "w": 90,
+          "h": 70,
+          "label": "T4"
+        },
+        {
+          "id": "t6",
+          "x": 316,
+          "y": 145,
+          "w": 80,
+          "h": 80,
+          "label": "T5"
+        }
+      ],
+      "upcoming": [
+        {
+          "name": "5:00 PM",
+          "status": "Available"
+        },
+        {
+          "name": "6:30 PM",
+          "status": "Limited"
+        },
+        {
+          "name": "7:00 PM",
+          "status": "Available"
+        },
+        {
+          "name": "8:30 PM",
+          "status": "Full"
+        }
+      ]
+    },
+    "c1a1b1a0-0c1e-4f2f-8f4c-1a7777777777": {
+      "floorHighlights": [
+        {
+          "label": "Rooftop",
+          "value": "18 tables"
+        },
+        {
+          "label": "Indoor",
+          "value": "10 tables"
+        },
+        {
+          "label": "Bar",
+          "value": "10 seats"
+        }
+      ],
+      "floorTables": [
+        {
+          "id": "t1",
+          "x": 40,
+          "y": 40,
+          "w": 70,
+          "h": 70,
+          "label": "T1"
+        },
+        {
+          "id": "t2",
+          "x": 140,
+          "y": 40,
+          "w": 90,
+          "h": 60,
+          "label": "T2"
+        },
+        {
+          "id": "t3",
+          "x": 260,
+          "y": 40,
+          "w": 110,
+          "h": 60,
+          "label": "Bar"
+        },
+        {
+          "id": "t4",
+          "x": 60,
+          "y": 140,
+          "w": 70,
+          "h": 70,
+          "label": "T3"
+        },
+        {
+          "id": "t5",
+          "x": 170,
+          "y": 140,
+          "w": 90,
+          "h": 70,
+          "label": "T4"
+        },
+        {
+          "id": "t6",
+          "x": 300,
+          "y": 140,
+          "w": 80,
+          "h": 80,
+          "label": "T5"
+        }
+      ],
+      "upcoming": [
+        {
+          "name": "4:00 PM",
+          "status": "Available"
+        },
+        {
+          "name": "5:30 PM",
+          "status": "Limited"
+        },
+        {
+          "name": "6:00 PM",
+          "status": "Available"
+        },
+        {
+          "name": "7:30 PM",
+          "status": "Full"
+        }
+      ]
+    },
+    "c1a1b1a0-0c1e-4f2f-8f4c-1a8888888888": {
+      "floorHighlights": [
+        {
+          "label": "Sushi bar",
+          "value": "20 tables"
+        },
+        {
+          "label": "Outdoor",
+          "value": "12 tables"
+        },
+        {
+          "label": "Private",
+          "value": "12 seats"
+        }
+      ],
+      "floorTables": [
+        {
+          "id": "t1",
+          "x": 48,
+          "y": 45,
+          "w": 70,
+          "h": 70,
+          "label": "T1"
+        },
+        {
+          "id": "t2",
+          "x": 148,
+          "y": 45,
+          "w": 90,
+          "h": 60,
+          "label": "T2"
+        },
+        {
+          "id": "t3",
+          "x": 268,
+          "y": 45,
+          "w": 110,
+          "h": 60,
+          "label": "Bar"
+        },
+        {
+          "id": "t4",
+          "x": 68,
+          "y": 145,
+          "w": 70,
+          "h": 70,
+          "label": "T3"
+        },
+        {
+          "id": "t5",
+          "x": 178,
+          "y": 145,
+          "w": 90,
+          "h": 70,
+          "label": "T4"
+        },
+        {
+          "id": "t6",
+          "x": 308,
+          "y": 145,
+          "w": 80,
+          "h": 80,
+          "label": "T5"
+        }
+      ],
+      "upcoming": [
+        {
+          "name": "5:00 PM",
+          "status": "Available"
+        },
+        {
+          "name": "6:30 PM",
+          "status": "Limited"
+        },
+        {
+          "name": "7:00 PM",
+          "status": "Available"
+        },
+        {
+          "name": "8:30 PM",
+          "status": "Full"
+        }
+      ]
+    },
+    "c1a1b1a0-0c1e-4f2f-8f4c-1a9999999999": {
+      "floorHighlights": [
+        {
+          "label": "Indoor",
+          "value": "22 tables"
+        },
+        {
+          "label": "Bar",
+          "value": "14 tables"
+        },
+        {
+          "label": "Garden",
+          "value": "6 seats"
+        }
+      ],
+      "floorTables": [
+        {
+          "id": "t1",
+          "x": 56,
+          "y": 40,
+          "w": 70,
+          "h": 70,
+          "label": "T1"
+        },
+        {
+          "id": "t2",
+          "x": 156,
+          "y": 40,
+          "w": 90,
+          "h": 60,
+          "label": "T2"
+        },
+        {
+          "id": "t3",
+          "x": 276,
+          "y": 40,
+          "w": 110,
+          "h": 60,
+          "label": "Bar"
+        },
+        {
+          "id": "t4",
+          "x": 76,
+          "y": 140,
+          "w": 70,
+          "h": 70,
+          "label": "T3"
+        },
+        {
+          "id": "t5",
+          "x": 186,
+          "y": 140,
+          "w": 90,
+          "h": 70,
+          "label": "T4"
+        },
+        {
+          "id": "t6",
+          "x": 316,
+          "y": 140,
+          "w": 80,
+          "h": 80,
+          "label": "T5"
+        }
+      ],
+      "upcoming": [
+        {
+          "name": "4:00 PM",
+          "status": "Available"
+        },
+        {
+          "name": "5:30 PM",
+          "status": "Limited"
+        },
+        {
+          "name": "6:00 PM",
+          "status": "Available"
+        },
+        {
+          "name": "7:30 PM",
+          "status": "Full"
+        }
+      ]
+    },
+    "c1a1b1a0-0c1e-4f2f-8f4c-1b0000000000": {
+      "floorHighlights": [
+        {
+          "label": "Outdoor",
+          "value": "24 tables"
+        },
+        {
+          "label": "Private",
+          "value": "16 tables"
+        },
+        {
+          "label": "Patio",
+          "value": "8 seats"
+        }
+      ],
+      "floorTables": [
+        {
+          "id": "t1",
+          "x": 40,
+          "y": 45,
+          "w": 70,
+          "h": 70,
+          "label": "T1"
+        },
+        {
+          "id": "t2",
+          "x": 140,
+          "y": 45,
+          "w": 90,
+          "h": 60,
+          "label": "T2"
+        },
+        {
+          "id": "t3",
+          "x": 260,
+          "y": 45,
+          "w": 110,
+          "h": 60,
+          "label": "Bar"
+        },
+        {
+          "id": "t4",
+          "x": 60,
+          "y": 145,
+          "w": 70,
+          "h": 70,
+          "label": "T3"
+        },
+        {
+          "id": "t5",
+          "x": 170,
+          "y": 145,
+          "w": 90,
+          "h": 70,
+          "label": "T4"
+        },
+        {
+          "id": "t6",
+          "x": 300,
+          "y": 145,
+          "w": 80,
+          "h": 80,
+          "label": "T5"
+        }
+      ],
+      "upcoming": [
+        {
+          "name": "5:00 PM",
+          "status": "Available"
+        },
+        {
+          "name": "6:30 PM",
+          "status": "Limited"
+        },
+        {
+          "name": "7:00 PM",
+          "status": "Available"
+        },
+        {
+          "name": "8:30 PM",
+          "status": "Full"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "profiles": [
+    {
+      "id": "admin-001",
+      "role": "admin",
+      "name": "Admin User",
+      "email": "admin@byewind.com",
+      "password": "Admin@123"
+    },
+    {
+      "id": "superadmin-001",
+      "role": "super-admin",
+      "name": "Super Admin",
+      "email": "superadmin@byewind.com",
+      "password": "Super@123"
+    },
+    {
+      "id": "user-001",
+      "role": "user",
+      "name": "Guest User",
+      "email": "",
+      "password": "User@123"
+    }
+  ]
+}
