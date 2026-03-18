@@ -3,11 +3,14 @@ const { prisma } = require('../../../config');
 const ApiError = require('../../../shared/utils/ApiError');
 const { createAuditLog } = require('../../../middlewares/auditLogger.middleware');
 
+const normalizeStatus = (status) =>
+  typeof status === 'string' ? status.toUpperCase() : undefined;
+
 class BranchService {
   async createBranch(restaurantId, data, auditContext) {
     const branch = await prisma.$transaction(async (tx) => {
       const created = await tx.branch.create({
-        data: { ...data, restaurantId },
+        data: { ...data, restaurantId, status: 'PENDING' },
       });
 
       // Initialize branch go-live status
@@ -41,15 +44,25 @@ class BranchService {
     return branch;
   }
 
-  async getAllBranches(restaurantId, pagination) {
-    return branchRepository.findAllByRestaurant(restaurantId, pagination);
+  async getAllBranches(restaurantId, pagination, filters = {}) {
+    const statuses = filters.statuses?.map(normalizeStatus).filter(Boolean);
+    return branchRepository.findAllByRestaurant(restaurantId, {
+      ...pagination,
+      statuses,
+      isActive:
+        typeof filters.isActive === 'boolean' ? filters.isActive : true,
+    });
   }
 
   async updateBranch(id, data, auditContext) {
     const existing = await branchRepository.findById(id);
     if (!existing) throw ApiError.notFound('Branch not found');
 
-    const updated = await branchRepository.update(id, data);
+    const payload = { ...data };
+    if (payload.status) {
+      payload.status = normalizeStatus(payload.status);
+    }
+    const updated = await branchRepository.update(id, payload);
 
     await createAuditLog({
       entity: 'Branch',

@@ -197,6 +197,12 @@ model Restaurant {
 // ══════════════════════════════════════════════════════════════════════
 
 /// Each branch is an independent location under one restaurant master account
+enum BranchStatus {
+  DRAFT
+  PENDING
+  LIVE
+}
+
 model Branch {
   id           String   @id @default(uuid())
   restaurantId String
@@ -210,6 +216,8 @@ model Branch {
 
   // Lifecycle
   isActive     Boolean  @default(true)
+  isLive       Boolean  @default(false)
+  status       BranchStatus @default(PENDING)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 

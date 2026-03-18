@@ -1,5 +1,9 @@
 const { z } = require('zod');
 
+const branchStatusEnum = z
+  .enum(['draft', 'pending', 'live', 'DRAFT', 'PENDING', 'LIVE'])
+  .transform((value) => value.toUpperCase());
+
 const addressSchema = z.object({
   street: z.string().min(1),
   city: z.string().min(1),
@@ -26,9 +30,18 @@ const updateBranchSchema = {
     phone: z.string().optional().nullable(),
     email: z.string().email().optional().nullable(),
     isActive: z.boolean().optional(),
+    status: branchStatusEnum.optional(),
   }),
   params: z.object({
     id: z.string().uuid('Invalid branch ID'),
+  }),
+};
+
+const listBranchesSchema = {
+  query: z.object({
+    page: z.coerce.number().int().positive().optional(),
+    limit: z.coerce.number().int().positive().optional(),
+    status: z.string().optional(),
   }),
 };
 
@@ -38,4 +51,9 @@ const branchIdParam = {
   }),
 };
 
-module.exports = { createBranchSchema, updateBranchSchema, branchIdParam };
+module.exports = {
+  createBranchSchema,
+  updateBranchSchema,
+  branchIdParam,
+  listBranchesSchema,
+};

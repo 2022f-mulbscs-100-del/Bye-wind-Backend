@@ -1,6 +1,21 @@
 const { prisma } = require('../../../config');
 
 class BranchRepository {
+  buildWhereClause(restaurantId, options = {}) {
+    const { statuses, isActive } = options;
+    const where = { restaurantId };
+
+    if (typeof isActive === 'boolean') {
+      where.isActive = isActive;
+    }
+
+    if (Array.isArray(statuses) && statuses.length > 0) {
+      where.status = { in: statuses };
+    }
+
+    return where;
+  }
+
   async create(data) {
     return prisma.branch.create({ data });
   }
@@ -22,15 +37,17 @@ class BranchRepository {
     });
   }
 
-  async findAllByRestaurant(restaurantId, { skip, take }) {
+  async findAllByRestaurant(restaurantId, { skip, take, statuses, isActive = true }) {
+    const where = this.buildWhereClause(restaurantId, { statuses, isActive });
     const [data, total] = await Promise.all([
       prisma.branch.findMany({
-        where: { restaurantId, isActive: true },
+        where,
+        include: { goLiveStatus: true },
         skip,
         take,
         orderBy: { createdAt: 'desc' },
       }),
-      prisma.branch.count({ where: { restaurantId, isActive: true } }),
+      prisma.branch.count({ where }),
     ]);
     return { data, total };
   }

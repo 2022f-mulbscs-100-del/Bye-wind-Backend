@@ -19,6 +19,7 @@ const getById = asyncHandler(async (req, res) => {
 
 const getAll = asyncHandler(async (req, res) => {
   const pagination = parsePagination(req.query);
+  pagination.branchId = req.query.branchId;
   const { data, total } = await staffService.getAll(req.restaurantId, pagination);
   const meta = buildPaginationMeta(total, pagination.page, pagination.limit);
   ApiResponse.ok('Staff fetched', data, meta).send(res);

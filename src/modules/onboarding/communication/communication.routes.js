@@ -11,6 +11,7 @@ const router = Router();
 router.use(requireTenant);
 
 router.post('/', authorize('communication:write'), validate(createCommunicationSchema), controller.create);
+router.post('/bulk', authorize('communication:write'), controller.bulkUpsert);
 router.get('/', authorize('communication:read'), controller.getAll);
 router.put('/:id', authorize('communication:write'), validate(updateCommunicationSchema), controller.update);
 router.delete('/:id', authorize('communication:write'), controller.remove);

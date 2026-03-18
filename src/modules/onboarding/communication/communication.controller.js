@@ -21,4 +21,9 @@ const remove = asyncHandler(async (req, res) => {
   ApiResponse.ok('Communication channel removed').send(res);
 });
 
-module.exports = { create, getAll, update, remove };
+const bulkUpsert = asyncHandler(async (req, res) => {
+  const configs = await commService.bulkUpsert(req.restaurantId, req.body.channels, req.auditContext);
+  ApiResponse.ok('Communication channels updated', configs).send(res);
+});
+
+module.exports = { create, getAll, update, remove, bulkUpsert };

@@ -16,16 +16,21 @@ class StaffRepository {
     });
   }
 
-  async findAllByRestaurant(restaurantId, { skip, take }) {
+  async findAllByRestaurant(restaurantId, { skip, take, branchId }) {
+    const where = { restaurantId };
+    if (branchId) {
+      where.branches = { some: { branchId } };
+    }
+
     const [data, total] = await Promise.all([
       prisma.staff.findMany({
-        where: { restaurantId },
+        where,
         select: { id: true, email: true, firstName: true, lastName: true, role: true, isActive: true, createdAt: true },
         skip,
         take,
         orderBy: { createdAt: 'desc' },
       }),
-      prisma.staff.count({ where: { restaurantId } }),
+      prisma.staff.count({ where }),
     ]);
     return { data, total };
   }

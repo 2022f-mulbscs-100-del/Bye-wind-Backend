@@ -72,6 +72,10 @@ class GoLiveService {
         where: { id: restaurantId },
         data: { status: 'LIVE' },
       }),
+      prisma.branch.updateMany({
+        where: { restaurantId },
+        data: { status: 'LIVE', isLive: true, isActive: true },
+      }),
     ]);
 
     await createAuditLog({
