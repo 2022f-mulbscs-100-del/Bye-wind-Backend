@@ -38,6 +38,15 @@ class BusinessHoursService {
         where: { branchId },
         data: { businessHoursDone: true },
       });
+
+      // Also update the restaurant-level checklist
+      const branch = await tx.branch.findUnique({ where: { id: branchId }, select: { restaurantId: true } });
+      if (branch) {
+        await tx.goLiveChecklist.update({
+          where: { restaurantId: branch.restaurantId },
+          data: { businessHoursDone: true },
+        });
+      }
     });
 
     await createAuditLog({

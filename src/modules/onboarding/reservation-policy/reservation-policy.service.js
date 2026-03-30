@@ -14,6 +14,14 @@ class ReservationPolicyService {
       data: { reservationPolicyDone: true },
     });
 
+    const branch = await prisma.branch.findUnique({ where: { id: branchId }, select: { restaurantId: true } });
+    if (branch) {
+      await prisma.goLiveChecklist.update({
+        where: { restaurantId: branch.restaurantId },
+        data: { reservationPolicyDone: true },
+      });
+    }
+
     await createAuditLog({ entity: 'ReservationPolicy', entityId: policy.id, action: 'CREATE', newValue: policy, auditContext });
     return policy;
   }
@@ -28,6 +36,15 @@ class ReservationPolicyService {
     const existing = await policyRepo.findById(id);
     if (!existing) throw ApiError.notFound('Reservation policy not found');
     const updated = await policyRepo.update(id, data);
+
+    const branch = await prisma.branch.findUnique({ where: { id: updated.branchId }, select: { restaurantId: true } });
+    if (branch) {
+      await prisma.goLiveChecklist.update({
+        where: { restaurantId: branch.restaurantId },
+        data: { reservationPolicyDone: true },
+      });
+    }
+
     await createAuditLog({ entity: 'ReservationPolicy', entityId: id, action: 'UPDATE', oldValue: existing, newValue: updated, auditContext });
     return updated;
   }

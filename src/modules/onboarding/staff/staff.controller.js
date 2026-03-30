@@ -26,6 +26,7 @@ const getAll = asyncHandler(async (req, res) => {
 });
 
 const update = asyncHandler(async (req, res) => {
+  console.log('Update API called with body:', JSON.stringify(req.body, null, 2));
   const staff = await staffService.update(req.params.id, req.body, req.auditContext);
   ApiResponse.ok('Staff updated', staff).send(res);
 });

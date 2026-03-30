@@ -2,6 +2,7 @@ const commRepo = require('./communication.repository');
 const ApiError = require('../../../shared/utils/ApiError');
 const { encrypt, decrypt } = require('../../../shared/utils/encryption');
 const { createAuditLog } = require('../../../middlewares/auditLogger.middleware');
+const { prisma } = require('../../../config');
 
 class CommunicationService {
   async create(restaurantId, data, auditContext) {
@@ -16,6 +17,12 @@ class CommunicationService {
     };
 
     const config = await commRepo.create(encrypted);
+
+    await prisma.goLiveChecklist.update({
+      where: { restaurantId },
+      data: { communicationDone: true },
+    });
+
     await createAuditLog({ entity: 'CommunicationChannelConfig', entityId: config.id, action: 'CREATE', auditContext });
     return this._sanitize(config);
   }
@@ -70,6 +77,14 @@ class CommunicationService {
       }
       results.push(this._sanitize(config));
     }
+
+    if (results.length > 0) {
+      await prisma.goLiveChecklist.update({
+        where: { restaurantId },
+        data: { communicationDone: true },
+      });
+    }
+
     return results;
   }
 

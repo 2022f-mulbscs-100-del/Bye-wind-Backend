@@ -76,6 +76,10 @@ const PERMISSIONS = {
   'pos:read':           [ROLES.OWNER],
   'pos:write':          [ROLES.OWNER],
 
+  // ── Menu Management ───────────────────────────────────────────────
+  'menu:read':          [ROLES.OWNER, ROLES.HOST, ROLES.STAFF],
+  'menu:write':         [ROLES.OWNER],
+
   // ── Data Import ───────────────────────────────────────────────────
   'import:read':        [ROLES.OWNER],
   'import:write':       [ROLES.OWNER],

@@ -2,6 +2,7 @@ const paymentRepo = require('./payment-gateway.repository');
 const ApiError = require('../../../shared/utils/ApiError');
 const { encrypt, decrypt } = require('../../../shared/utils/encryption');
 const { createAuditLog } = require('../../../middlewares/auditLogger.middleware');
+const { prisma } = require('../../../config');
 
 class PaymentGatewayService {
   async create(restaurantId, data, auditContext) {
@@ -19,6 +20,12 @@ class PaymentGatewayService {
     };
 
     const gateway = await paymentRepo.create(encrypted);
+    
+    await prisma.goLiveChecklist.update({
+      where: { restaurantId },
+      data: { paymentConfiguredDone: true },
+    });
+
     await createAuditLog({ entity: 'PaymentGateway', entityId: gateway.id, action: 'CREATE', newValue: { ...gateway, apiKey: '[ENCRYPTED]', secretKey: '[ENCRYPTED]' }, auditContext });
     return this._sanitize(gateway);
   }
@@ -39,6 +46,12 @@ class PaymentGatewayService {
     if (data.webhookSecret) toUpdate.webhookSecret = encrypt(data.webhookSecret);
 
     const updated = await paymentRepo.update(id, toUpdate);
+
+    await prisma.goLiveChecklist.update({
+      where: { restaurantId: updated.restaurantId },
+      data: { paymentConfiguredDone: true },
+    });
+
     await createAuditLog({ entity: 'PaymentGateway', entityId: id, action: 'UPDATE', auditContext });
     return this._sanitize(updated);
   }

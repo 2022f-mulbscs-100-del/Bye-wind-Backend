@@ -18,6 +18,7 @@ const registerStaffSchema = {
       lastName: z.string().min(1),
       phone: z.string().optional().nullable(),
       role: z.enum(ROLES),
+      branchId: z.string().uuid().optional().nullable(),
     })
     .superRefine((data, ctx) => {
       // Non-super-admin roles MUST have a restaurantId
@@ -46,6 +47,7 @@ const updateStaffSchema = {
     role: z.enum(ROLES).optional(),
     permissions: z.record(z.boolean()).optional(),
     isActive: z.boolean().optional(),
+    branchId: z.string().uuid().optional().nullable(),
   }),
   params: z.object({ id: z.string().uuid() }),
 };

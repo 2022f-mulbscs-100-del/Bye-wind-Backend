@@ -64,6 +64,12 @@ class BranchService {
     }
     const updated = await branchRepository.update(id, payload);
 
+    // Update go-live checklist to mark branch setup as done
+    await prisma.goLiveChecklist.updateMany({
+      where: { restaurantId: existing.restaurantId },
+      data: { branchSetupDone: true },
+    });
+
     await createAuditLog({
       entity: 'Branch',
       entityId: id,
