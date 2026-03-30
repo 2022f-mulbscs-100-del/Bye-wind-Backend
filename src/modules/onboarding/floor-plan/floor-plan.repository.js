@@ -51,7 +51,7 @@ class FloorPlanRepository {
   }
 
   async updateTable(id, data) {
-    return prisma.table.update({ where: { id }, data });
+    return prisma.table.update({ where: { id }, data, include: { floorPlan: true } });
   }
 
   async deleteTable(id) {

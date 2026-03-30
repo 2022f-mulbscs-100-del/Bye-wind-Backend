@@ -18,4 +18,6 @@ if (env.isProd) {
   prisma = global.__prisma;
 }
 
+console.log('Database.js - Exporting Prisma Client:', prisma ? 'SUCCESS' : 'FAILED');
+
 module.exports = prisma;

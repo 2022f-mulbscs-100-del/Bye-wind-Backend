@@ -12,6 +12,14 @@ class TurnTimeService {
       data: { turnTimesDone: true },
     });
 
+    const branch = await prisma.branch.findUnique({ where: { id: data.branchId }, select: { restaurantId: true } });
+    if (branch) {
+      await prisma.goLiveChecklist.update({
+        where: { restaurantId: branch.restaurantId },
+        data: { turnTimesDone: true },
+      });
+    }
+
     await createAuditLog({ entity: 'TurnTimeRule', entityId: rule.id, action: 'CREATE', newValue: rule, auditContext });
     return rule;
   }
@@ -24,6 +32,15 @@ class TurnTimeService {
     const existing = await turnTimeRepo.findById(id);
     if (!existing) throw ApiError.notFound('Turn time rule not found');
     const updated = await turnTimeRepo.update(id, data);
+
+    const branch = await prisma.branch.findUnique({ where: { id: updated.branchId }, select: { restaurantId: true } });
+    if (branch) {
+      await prisma.goLiveChecklist.update({
+        where: { restaurantId: branch.restaurantId },
+        data: { turnTimesDone: true },
+      });
+    }
+
     await createAuditLog({ entity: 'TurnTimeRule', entityId: id, action: 'UPDATE', oldValue: existing, newValue: updated, auditContext });
     return updated;
   }

@@ -18,6 +18,7 @@ const brandingRoutes = require('../modules/onboarding/branding/branding.routes')
 const bookingWidgetRoutes = require('../modules/onboarding/booking-widget/booking-widget.routes');
 const auditLogRoutes = require('../modules/onboarding/audit-logs/audit-logs.routes');
 const goLiveRoutes = require('../modules/onboarding/go-live/go-live.routes');
+const menuRoutes = require('../modules/menu/menu.routes');
 
 const router = Router();
 
@@ -30,6 +31,7 @@ router.use(authenticate);
 
 router.use('/restaurants', restaurantRoutes);
 router.use('/branches', branchRoutes);
+router.use('/branches/:branchId/menu-items', menuRoutes);
 router.use('/business-hours', businessHoursRoutes);
 router.use('/floor-plans', floorPlanRoutes);
 router.use('/table-configs', tableConfigRoutes);

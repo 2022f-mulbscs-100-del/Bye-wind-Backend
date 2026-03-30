@@ -162,6 +162,7 @@ async function main() {
     },
     create: {
       email: SUPER_ADMIN_EMAIL,
+      staffUsername: 'super_admin_seed',
       passwordHash: superAdminHash,
       firstName: 'Super',
       lastName: 'Admin',
@@ -182,6 +183,7 @@ async function main() {
     },
     create: {
       email: OWNER_EMAIL,
+      staffUsername: 'aurora_vega_owner',
       passwordHash: ownerHash,
       firstName: 'Aurora',
       lastName: 'Vega',

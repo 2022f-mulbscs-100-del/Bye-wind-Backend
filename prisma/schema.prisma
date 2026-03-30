@@ -68,6 +68,11 @@ enum ZoneType {
   PRIVATE_DINING
   TERRACE
   ROOFTOP
+  RESTAURANT_AREA
+  HOTEL_AREA
+  LOUNGE_AREA
+  SERVICE_AREA
+  ENTRANCE_ZONE
 }
 
 /// Sub-module 4 — Table shapes for the floor plan designer
@@ -233,6 +238,7 @@ model Branch {
   bookingWidgets    BookingWidget[]
   dataImports       DataImport[]
   goLiveStatus      BranchGoLiveStatus?
+  menuItems         MenuItem[]
 
   @@map("branches")
 }
@@ -317,16 +323,21 @@ model FloorPlan {
   @@map("floor_plans")
 }
 
-/// Seating zones within a floor plan (Indoor, Outdoor, Bar, etc.)
 model Zone {
-  id          String   @id @default(uuid())
-  floorPlanId String
-  name        String   // e.g. "Indoor Section A"
-  type        ZoneType
-  color       String?  // Hex color for visual distinction in the designer
-  description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           String   @id @default(uuid())
+  floorPlanId  String
+  name         String   // e.g. "Indoor Section A"
+  type         ZoneType
+  color        String?  // Hex color for visual distinction in the designer
+  description  String?
+  positionX    Float    @default(0)   // Canvas X coordinate
+  positionY    Float    @default(0)   // Canvas Y coordinate
+  width        Float    @default(320) // px
+  height       Float    @default(180) // px
+  zIndex       Int      @default(1)
+  cornerRadius Float    @default(24)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   floorPlan FloorPlan @relation(fields: [floorPlanId], references: [id], onDelete: Cascade)
   tables    Table[]
@@ -348,6 +359,7 @@ model Table {
   positionY   Float      @default(0)   // Canvas Y coordinate
   rotation    Float      @default(0)   // Degrees (0–359)
   capacity    Int        // Max seating capacity
+  spacing     Float      @default(12)  // px
   isActive    Boolean    @default(true)
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
@@ -463,24 +475,49 @@ model ReservationPolicy {
 }
 
 // ══════════════════════════════════════════════════════════════════════
+// SUB-MODULE 7B — Menu Management
+// ══════════════════════════════════════════════════════════════════════
+
+/// Menu items — dishes/products offered by the restaurant
+model MenuItem {
+  id          String   @id @default(uuid())
+  branchId    String
+  name        String   // e.g. "Margherita Pizza"
+  description String?  // Detailed description
+  price       Float    // Item price
+  imageUrl    String?  // Image URL (S3/Cloudinary)
+  category    String?  // e.g. "Appetizer", "Main Course", "Dessert"
+  isAvailable Boolean  @default(true)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  branch Branch @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@map("menu_items")
+}
+
+// ══════════════════════════════════════════════════════════════════════
 // SUB-MODULE 8 — Staff & Role Management
 // ══════════════════════════════════════════════════════════════════════
 
 /// Staff member — SUPER_ADMIN has null restaurantId (platform-wide), others belong to a restaurant
 model Staff {
-  id           String    @id @default(uuid())
-  restaurantId String?   // Nullable for SUPER_ADMIN (platform-level users)
-  email        String    @unique
-  passwordHash String
-  firstName    String
-  lastName     String
-  phone        String?
-  role         StaffRole
-  permissions  Json      @default("{}") // Granular permission overrides on top of role
-  isActive     Boolean   @default(true)
-  lastLoginAt  DateTime?
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  id                        String    @id @default(uuid())
+  restaurantId              String?   // Nullable for SUPER_ADMIN (platform-level users)
+  email                     String    @unique
+  staffUsername             String    @unique // Username for login credentials display
+  passwordHash              String
+  firstName                 String
+  lastName                  String
+  phone                     String?
+  role                      StaffRole
+  permissions               Json      @default("{}") // Granular permission overrides on top of role
+  isActive                  Boolean   @default(true)
+  lastLoginAt               DateTime?
+  staffCredentialCreatedAt  DateTime  @default(now())  // Track when credentials were created/reset
+  createdAt                 DateTime  @default(now())
+  updatedAt                 DateTime  @updatedAt
 
   restaurant Restaurant?   @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
   branches   StaffBranch[]

@@ -19,7 +19,7 @@ router.delete('/:id', authorize('floor-plan:write'), c.deleteFloorPlan);
 
 // ── Zones ────────────────────────────────────────────────────────────
 router.post('/zones', authorize('floor-plan:write'), validate(v.createZoneSchema), c.createZone);
-router.put('/zones/:id', authorize('floor-plan:write'), c.updateZone);
+router.put('/zones/:id', authorize('floor-plan:write'), validate(v.updateZoneSchema), c.updateZone);
 router.delete('/zones/:id', authorize('floor-plan:write'), c.deleteZone);
 
 // ── Tables ───────────────────────────────────────────────────────────

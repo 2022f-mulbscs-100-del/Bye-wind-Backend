@@ -13,6 +13,14 @@ class FloorPlanService {
       data: { floorPlanDone: true },
     });
 
+    const branch = await prisma.branch.findUnique({ where: { id: data.branchId }, select: { restaurantId: true } });
+    if (branch) {
+      await prisma.goLiveChecklist.update({
+        where: { restaurantId: branch.restaurantId },
+        data: { floorPlanDone: true },
+      });
+    }
+
     await createAuditLog({ entity: 'FloorPlan', entityId: floorPlan.id, action: 'CREATE', newValue: floorPlan, auditContext });
     return floorPlan;
   }
@@ -88,6 +96,23 @@ class FloorPlanService {
       const updated = await floorPlanRepo.updateTable(id, data);
       results.push(updated);
     }
+
+    if (results.length > 0) {
+      const branchId = results[0].floorPlan.branchId;
+      await prisma.branchGoLiveStatus.updateMany({
+        where: { branchId },
+        data: { tablesConfiguredDone: true },
+      });
+
+      const branch = await prisma.branch.findUnique({ where: { id: branchId }, select: { restaurantId: true } });
+      if (branch) {
+        await prisma.goLiveChecklist.update({
+          where: { restaurantId: branch.restaurantId },
+          data: { tablesConfiguredDone: true },
+        });
+      }
+    }
+
     await createAuditLog({ entity: 'Table', entityId: 'bulk', action: 'UPDATE', newValue: tables, auditContext });
     return results;
   }
