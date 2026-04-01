@@ -22,6 +22,16 @@ const getByBranch = asyncHandler(async (req, res) => {
   ApiResponse.ok('Menu items fetched', result).send(res);
 });
 
+const getAll = asyncHandler(async (req, res) => {
+  const pagination = parsePagination(req.query);
+  const filters = {
+    category: req.query.category,
+    isAvailable: req.query.isAvailable !== undefined ? req.query.isAvailable === 'true' : undefined,
+  };
+  const result = await menuService.getAllMenuItems(pagination, filters);
+  ApiResponse.ok('All menu items fetched', result).send(res);
+});
+
 const update = asyncHandler(async (req, res) => {
   const menuItem = await menuService.updateMenuItem(req.params.id, req.body, req.auditContext);
   ApiResponse.ok('Menu item updated successfully', menuItem).send(res);
@@ -32,4 +42,4 @@ const remove = asyncHandler(async (req, res) => {
   ApiResponse.ok('Menu item deleted successfully').send(res);
 });
 
-module.exports = { create, getById, getByBranch, update, remove };
+module.exports = { create, getById, getByBranch, getAll, update, remove };

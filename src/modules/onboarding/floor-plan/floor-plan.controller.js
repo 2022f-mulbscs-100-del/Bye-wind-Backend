@@ -64,6 +64,11 @@ const bulkUpdateTables = asyncHandler(async (req, res) => {
   ApiResponse.ok('Tables updated', tables).send(res);
 });
 
+const bulkCreateTables = asyncHandler(async (req, res) => {
+  const tables = await floorPlanService.bulkCreateTables(req.body.tables, req.auditContext);
+  ApiResponse.created('Tables created', tables).send(res);
+});
+
 const deleteTable = asyncHandler(async (req, res) => {
   await floorPlanService.deleteTable(req.params.id, req.auditContext);
   ApiResponse.ok('Table deleted').send(res);
@@ -72,5 +77,5 @@ const deleteTable = asyncHandler(async (req, res) => {
 module.exports = {
   createFloorPlan, getFloorPlan, getFloorPlansByBranch, updateFloorPlan, deleteFloorPlan,
   createZone, updateZone, deleteZone,
-  createTable, getTable, updateTable, bulkUpdateTables, deleteTable,
+  createTable, getTable, updateTable, bulkUpdateTables, bulkCreateTables, deleteTable,
 };

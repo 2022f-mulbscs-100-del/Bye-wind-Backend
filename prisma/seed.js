@@ -193,8 +193,98 @@ async function main() {
     },
   });
 
+  // Create additional sample restaurants for display
+  const additionalRestaurants = [
+    {
+      id: 'a1234567-89ab-cdef-0123-456789abcdef',
+      brandName: 'Spice Route',
+      cuisineTypes: ['South Asian', 'Indian', 'Contemporary'],
+      city: 'San Francisco',
+    },
+    {
+      id: 'b2345678-90bc-def1-2345-6789abcdef01',
+      brandName: 'Green Leaf Café',
+      cuisineTypes: ['Vegan', 'Healthy', 'Organic'],
+      city: 'Oakland',
+    },
+    {
+      id: 'c3456789-01cd-ef23-4567-89abcdef0123',
+      brandName: 'Skyline Bistro',
+      cuisineTypes: ['French', 'Continental', 'Fine Dining'],
+      city: 'Berkeley',
+    },
+    {
+      id: 'd4567890-12de-f345-6789-abcdef012345',
+      brandName: 'Sunset Grill',
+      cuisineTypes: ['American', 'BBQ', 'Steakhouse'],
+      city: 'San Mateo',
+    },
+  ];
+
+  for (const rest of additionalRestaurants) {
+    await prisma.restaurant.upsert({
+      where: { id: rest.id },
+      update: {
+        status: 'LIVE',
+        isActive: true,
+      },
+      create: {
+        id: rest.id,
+        brandName: rest.brandName,
+        legalBusinessName: rest.brandName + ' Inc.',
+        cuisineTypes: rest.cuisineTypes,
+        registeredAddress: {
+          street: '123 Main Street',
+          city: rest.city,
+          state: 'CA',
+          country: 'United States',
+          zipCode: '94000',
+        },
+        operatingCountry: 'United States',
+        timezone: 'America/Los_Angeles',
+        planTier: 'Starter',
+        primaryContact: {
+          name: 'Manager',
+          email: `info@${rest.brandName.toLowerCase().replace(/ /g, '')}`,
+          phone: '+1-415-555-1234',
+          designation: 'General Manager',
+        },
+        status: 'LIVE',
+        isActive: true,
+      },
+    });
+
+    // Add at least one branch to each restaurant
+    const branchId = `${rest.id}-branch-1`;
+    await prisma.branch.upsert({
+      where: { id: branchId },
+      update: {
+        isActive: true,
+        isLive: true,
+      },
+      create: {
+        id: branchId,
+        restaurantId: rest.id,
+        name: `${rest.brandName} - Main`,
+        address: {
+          street: '123 Main Street',
+          city: rest.city,
+          state: 'CA',
+          country: 'United States',
+          zipCode: '94000',
+        },
+        timezone: 'America/Los_Angeles',
+        phone: '+1-415-555-1234',
+        email: `info@${rest.brandName.toLowerCase().replace(/ /g, '')}`,
+        isActive: true,
+        isLive: true,
+      },
+    });
+  }
+
   console.log('✅ Super-admin seeded:', SUPER_ADMIN_EMAIL, '/', SUPER_ADMIN_PASSWORD);
   console.log('✅ Restaurant owner seeded:', OWNER_EMAIL, '/', OWNER_PASSWORD);
+  console.log('✅ Sample restaurants created (5 total)');
 }
 
 main()

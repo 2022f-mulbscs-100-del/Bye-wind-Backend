@@ -149,6 +149,30 @@ enum AuditAction {
   STATUS_CHANGE
 }
 
+/// Sub-module 14 — Reservation lifecycle states
+enum ReservationStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+/// Sub-module 16 — Guest dietary restriction types
+enum DietaryRestriction {
+  VEGAN
+  VEGETARIAN
+  GLUTEN_FREE
+  DAIRY_FREE
+  NUT_ALLERGY
+  SHELLFISH_ALLERGY
+  HALAL
+  KOSHER
+  LOW_SODIUM
+  KETO
+  PALEO
+}
+
 // ══════════════════════════════════════════════════════════════════════
 // SUB-MODULE 1 — Restaurant Registration
 // ══════════════════════════════════════════════════════════════════════
@@ -193,6 +217,9 @@ model Restaurant {
   bookingWidgets        BookingWidget[]
   auditLogs             AuditLog[]
   goLiveChecklist       GoLiveChecklist?
+  reviews               GuestReview[]
+  savedRestaurants      SavedRestaurant[]
+  guestVisits           GuestVisit[]
 
   @@map("restaurants")
 }
@@ -239,6 +266,8 @@ model Branch {
   dataImports       DataImport[]
   goLiveStatus      BranchGoLiveStatus?
   menuItems         MenuItem[]
+  reservations      Reservation[]
+  guestVisits       GuestVisit[]
 
   @@map("branches")
 }
@@ -367,6 +396,7 @@ model Table {
   floorPlan   FloorPlan    @relation(fields: [floorPlanId], references: [id], onDelete: Cascade)
   zone        Zone?        @relation(fields: [zoneId], references: [id], onDelete: SetNull)
   tableConfig TableConfig?
+  reservationDetails ReservationDetail[]
 
   @@unique([floorPlanId, tableNumber]) // Table numbers unique within a floor plan
   @@map("tables")
@@ -720,6 +750,52 @@ model BookingWidget {
 }
 
 // ══════════════════════════════════════════════════════════════════════
+// SUB-MODULE 14 — Reservation Management
+// ══════════════════════════════════════════════════════════════════════
+
+/// Guest reservation — tracks when a guest books a table
+model Reservation {
+  id              String @id @default(uuid())
+  branchId        String
+  guestName       String
+  guestEmail      String?
+  guestPhone      String?
+  partySize       Int    // Number of guests
+  reservationDate DateTime // Date of reservation (local to branch)
+  timeSlot        String // e.g. "19:00", "19:30"
+  turnTimeMins    Int    @default(90) // How long the table is reserved (determined by turn time rules)
+  specialRequest  String?
+  status          ReservationStatus @default(PENDING)
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  branch Branch @relation(fields: [branchId], references: [id], onDelete: Cascade)
+  details ReservationDetail[]
+
+  @@index([branchId])
+  @@index([reservationDate])
+  @@index([status])
+  @@map("reservations")
+}
+
+/// Reservation detail — specific tables allocated to a reservation
+model ReservationDetail {
+  id            String @id @default(uuid())
+  reservationId String
+  tableId       String
+  allocatedSeats Int    // How many seats are allocated for this specific table
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  reservation Reservation @relation(fields: [reservationId], references: [id], onDelete: Cascade)
+  table       Table       @relation(fields: [tableId], references: [id], onDelete: Cascade)
+
+  @@unique([reservationId, tableId]) // Each table can only be allocated once per reservation
+  @@map("reservation_details")
+}
+
+// ══════════════════════════════════════════════════════════════════════
 // SUB-MODULE 15 — Audit Logs & Change Tracking
 // ══════════════════════════════════════════════════════════════════════
 
@@ -800,4 +876,132 @@ model BranchGoLiveStatus {
   branch Branch @relation(fields: [branchId], references: [id], onDelete: Cascade)
 
   @@map("branch_go_live_status")
+}
+
+// ══════════════════════════════════════════════════════════════════════
+// SUB-MODULE 17 — Guest Profiles & User Management
+// ══════════════════════════════════════════════════════════════════════
+
+/// Guest profile — user account for restaurant guests
+model GuestProfile {
+  id              String    @id @default(uuid())
+  name            String
+  email           String    @unique
+  phone           String?
+  location        String?   // City/location
+  profileImageUrl String?   // Avatar/profile picture URL
+  bio             String?
+  memberSince     DateTime  @default(now())
+  totalBookings   Int       @default(0)
+  totalSpent      Float     @default(0)
+  lastVisitDate   DateTime?
+  
+  // Contact preferences
+  receiveEmails   Boolean   @default(true)
+  receiveSMS      Boolean   @default(false)
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  // Relations
+  savedRestaurants SavedRestaurant[]
+  preferences     GuestPreference?
+  reviews         GuestReview[]
+
+  @@index([email])
+  @@index([memberSince])
+  @@map("guest_profiles")
+}
+
+/// Guest preferences — dietary restrictions & favorite cuisines
+model GuestPreference {
+  id                    String                  @id @default(uuid())
+  guestId               String                  @unique
+  dietaryRestrictions   DietaryRestriction[]   @default([])
+  favoriteCuisines      String[]               @default([]) // e.g. ["Italian", "Japanese", "Mediterranean"]
+  dietaryRestrictionsText String[]             @default([]) // Custom text for other restrictions
+  preferredPartySize    Int?                   // Typical party size
+  speakingPrefs         String[]               @default([]) // e.g. ["English", "Spanish"]
+  notes                 String?                // Any additional preferences
+  
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+
+  guest GuestProfile @relation(fields: [guestId], references: [id], onDelete: Cascade)
+
+  @@map("guest_preferences")
+}
+
+/// Saved restaurants — user's favorite/saved restaurants
+model SavedRestaurant {
+  id              String    @id @default(uuid())
+  guestId         String
+  restaurantId    String
+  name            String    // Denormalized for quick access
+  cuisine         String?
+  rating          Float?
+  priceRange      String?   // "$", "$$", "$$$", "$$$$"
+  location        String?
+  notes           String?   // Why user saved this restaurant
+  
+  savedAt         DateTime  @default(now())
+  lastVisitDate   DateTime?
+  visitCount      Int       @default(0)
+
+  guest       GuestProfile @relation(fields: [guestId], references: [id], onDelete: Cascade)
+  restaurant  Restaurant?   @relation(fields: [restaurantId], references: [id], onDelete: SetNull)
+
+  @@unique([guestId, restaurantId])
+  @@index([guestId])
+  @@index([restaurantId])
+  @@map("saved_restaurants")
+}
+
+/// Guest reviews — reviews left by guests for restaurants
+model GuestReview {
+  id              String    @id @default(uuid())
+  guestId         String
+  restaurantId    String
+  rating          Int       // 1-5 stars
+  title           String?
+  comment         String?
+  visitDate       DateTime
+  
+  isVerifiedGuest Boolean   @default(true)
+  helpful         Int       @default(0) // Number of helpful votes
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  guest       GuestProfile  @relation(fields: [guestId], references: [id], onDelete: Cascade)
+  restaurant  Restaurant    @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+
+  @@unique([guestId, restaurantId, visitDate])
+  @@index([guestId])
+  @@index([restaurantId])
+  @@index([rating])
+  @@map("guest_reviews")
+}
+
+/// Guest visit history — tracks when guest visited which restaurant
+model GuestVisit {
+  id              String    @id @default(uuid())
+  guestId         String
+  restaurantId    String
+  branchId        String
+  
+  visitDate       DateTime
+  partySize       Int
+  notes           String?
+  rating          Int?      // Optional satisfaction rating
+  
+  createdAt       DateTime  @default(now())
+
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  branch     Branch     @relation(fields: [branchId], references: [id], onDelete: Cascade)
+
+  @@index([guestId])
+  @@index([restaurantId])
+  @@index([visitDate])
+  @@map("guest_visits")
 }
