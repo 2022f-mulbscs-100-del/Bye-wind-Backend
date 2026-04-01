@@ -27,6 +27,7 @@ router.post('/tables', authorize('floor-plan:write'), validate(v.createTableSche
 router.get('/tables/:id', authorize('floor-plan:read'), c.getTable);
 router.put('/tables/:id', authorize('floor-plan:write'), validate(v.updateTableSchema), c.updateTable);
 router.put('/tables/bulk/positions', authorize('floor-plan:write'), validate(v.bulkUpdateTablesSchema), c.bulkUpdateTables);
+router.post('/tables/bulk/create', authorize('floor-plan:write'), c.bulkCreateTables);
 router.delete('/tables/:id', authorize('floor-plan:write'), c.deleteTable);
 
 module.exports = router;

@@ -70,6 +70,42 @@ class FloorPlanService {
 
   // ── Tables ─────────────────────────────────────────────────────────
   async createTable(data, auditContext) {
+    // Ensure unique tableNumber if not provided
+    if (!data.tableNumber) {
+      // Find the highest table number in this floor plan
+      const existingTables = await prisma.table.findMany({
+        where: { floorPlanId: data.floorPlanId },
+        select: { tableNumber: true },
+        orderBy: { tableNumber: 'desc' },
+        take: 1,
+      });
+
+      // Generate next table number (e.g., "T1", "T2", etc.)
+      const nextNumber = (existingTables.length > 0)
+        ? parseInt(existingTables[0].tableNumber.replace(/\D/g, '')) + 1
+        : 1;
+      data.tableNumber = `T${nextNumber}`;
+    } else {
+      // Check if tableNumber already exists for this floor plan
+      const existingTable = await prisma.table.findFirst({
+        where: {
+          floorPlanId: data.floorPlanId,
+          tableNumber: data.tableNumber,
+        },
+      });
+
+      if (existingTable) {
+        // If it exists, generate a unique one
+        const allTables = await prisma.table.findMany({
+          where: { floorPlanId: data.floorPlanId },
+          select: { tableNumber: true },
+        });
+        const numbers = allTables.map(t => parseInt(t.tableNumber.replace(/\D/g, ''))).filter(n => !isNaN(n));
+        const nextNumber = Math.max(...numbers, 0) + 1;
+        data.tableNumber = `T${nextNumber}`;
+      }
+    }
+
     const table = await floorPlanRepo.createTable(data);
     await createAuditLog({ entity: 'Table', entityId: table.id, action: 'CREATE', newValue: table, auditContext });
     return table;
@@ -114,6 +150,37 @@ class FloorPlanService {
     }
 
     await createAuditLog({ entity: 'Table', entityId: 'bulk', action: 'UPDATE', newValue: tables, auditContext });
+    return results;
+  }
+
+  async bulkCreateTables(tables, auditContext) {
+    const results = [];
+    for (const tableData of tables) {
+      const table = await this.createTable(tableData, auditContext);
+      results.push(table);
+    }
+
+    if (results.length > 0) {
+      const branchId = (await prisma.floorPlan.findUnique({
+        where: { id: results[0].floorPlanId },
+        select: { branchId: true },
+      })).branchId;
+
+      await prisma.branchGoLiveStatus.updateMany({
+        where: { branchId },
+        data: { tablesConfiguredDone: true },
+      });
+
+      const branch = await prisma.branch.findUnique({ where: { id: branchId }, select: { restaurantId: true } });
+      if (branch) {
+        await prisma.goLiveChecklist.update({
+          where: { restaurantId: branch.restaurantId },
+          data: { tablesConfiguredDone: true },
+        });
+      }
+    }
+
+    await createAuditLog({ entity: 'Table', entityId: 'bulk-create', action: 'CREATE', newValue: tables, auditContext });
     return results;
   }
 

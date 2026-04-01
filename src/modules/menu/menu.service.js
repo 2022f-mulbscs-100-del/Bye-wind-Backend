@@ -30,6 +30,10 @@ class MenuService {
     return menuRepository.findByBranch(branchId, pagination, filters);
   }
 
+  async getAllMenuItems(pagination, filters) {
+    return menuRepository.findAllByTenant(pagination, filters);
+  }
+
   async updateMenuItem(id, data, auditContext) {
     const existing = await menuRepository.findById(id);
     if (!existing) throw ApiError.notFound('Menu item not found');

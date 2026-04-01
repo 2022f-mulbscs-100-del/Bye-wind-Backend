@@ -1,5 +1,7 @@
 const { Router } = require('express');
 const { authenticate } = require('../middlewares/auth.middleware');
+const { requireTenant } = require('../middlewares/auth.middleware');
+const { authorize } = require('../middlewares/rbac.middleware');
 
 // ── Sub-module route imports ────────────────────────────────────────
 const restaurantRoutes = require('../modules/onboarding/restaurant/restaurant.routes');
@@ -19,10 +21,20 @@ const bookingWidgetRoutes = require('../modules/onboarding/booking-widget/bookin
 const auditLogRoutes = require('../modules/onboarding/audit-logs/audit-logs.routes');
 const goLiveRoutes = require('../modules/onboarding/go-live/go-live.routes');
 const menuRoutes = require('../modules/menu/menu.routes');
+const menuController = require('../modules/menu/menu.controller');
+const reservationRoutes = require('../modules/reservations/reservation.routes');
+const guestRoutes = require('../modules/guests/guest.routes');
+const publicRoutes = require('../modules/public/public.routes');
 
 const router = Router();
 
 // ── Public routes (no auth) ─────────────────────────────────────────
+// Public API endpoints (no authentication required)
+router.use('/public', publicRoutes);
+
+// Guest profile routes (public - email-based profiles)
+router.use('/guests', guestRoutes);
+
 // Staff login / registration are handled inside staff routes
 router.use('/staff', staffRoutes);
 
@@ -31,6 +43,8 @@ router.use(authenticate);
 
 router.use('/restaurants', restaurantRoutes);
 router.use('/branches', branchRoutes);
+// Master level menu items endpoint (all branches)
+router.get('/menu-items', requireTenant, authorize('menu:read'), menuController.getAll);
 router.use('/branches/:branchId/menu-items', menuRoutes);
 router.use('/business-hours', businessHoursRoutes);
 router.use('/floor-plans', floorPlanRoutes);
@@ -45,5 +59,6 @@ router.use('/branding', brandingRoutes);
 router.use('/booking-widgets', bookingWidgetRoutes);
 router.use('/audit-logs', auditLogRoutes);
 router.use('/go-live', goLiveRoutes);
+router.use('/reservations', reservationRoutes);
 
 module.exports = router;
