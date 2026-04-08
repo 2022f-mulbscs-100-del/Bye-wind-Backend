@@ -7,24 +7,94 @@ dotenv.config({ path: path.resolve(__dirname, '../.env') });
 
 const prisma = new PrismaClient();
 
-const SUPER_ADMIN_EMAIL = 'superadmin@restaurant.local';
-const SUPER_ADMIN_PASSWORD = 'SuperAdmin123!';
+// Admin User
+const ADMIN_EMAIL = 'admin@restaurant.local';
+const ADMIN_PASSWORD = 'Admin123456!';
+
+// Owner User
 const OWNER_EMAIL = 'owner@restaurant.local';
-const OWNER_PASSWORD = 'Owner123!';
+const OWNER_PASSWORD = 'Owner123456!';
+
+// Guest User
+const GUEST_EMAIL = 'guest@restaurant.local';
+const GUEST_PASSWORD = 'Guest123456!';
 
 const RESTAURANT_ID = 'f0836e33-5b0c-4e28-9c74-3c2d1cd2f140';
-const MAIN_BRANCH_ID = 'd8b1a5c2-68b1-4fda-9a6b-7c714a5f4a41';
+const MAIN_BRANCH_ID = 'd8b1a5c2-68b1-4fda-9a6b-7c714a5f4a41'; 
 const ROOFTOP_BRANCH_ID = 'a5e9c7d4-1234-41c0-a2c3-9f7a5c5e2c2d';
 const RESTAURANT_PLAN = 'Growth';
 
 async function main() {
   console.log('⏳ Seeding Restaurant API database...');
 
-  const [superAdminHash, ownerHash] = await Promise.all([
-    bcrypt.hash(SUPER_ADMIN_PASSWORD, 12),
+  // Hash passwords
+  const [adminHash, ownerHash, guestHash] = await Promise.all([
+    bcrypt.hash(ADMIN_PASSWORD, 12),
     bcrypt.hash(OWNER_PASSWORD, 12),
+    bcrypt.hash(GUEST_PASSWORD, 12),
   ]);
 
+  // Create or update ADMIN user
+  const adminUser = await prisma.user.upsert({
+    where: { email: ADMIN_EMAIL },
+    update: {
+      passwordHash: adminHash,
+      firstName: 'Super',
+      lastName: 'Admin',
+      role: 'ADMIN',
+      isActive: true,
+    },
+    create: {
+      email: ADMIN_EMAIL,
+      passwordHash: adminHash,
+      firstName: 'Super',
+      lastName: 'Admin',
+      role: 'ADMIN',
+      isActive: true,
+    },
+  });
+
+  // Create or update OWNER user
+  const ownerUser = await prisma.user.upsert({
+    where: { email: OWNER_EMAIL },
+    update: {
+      passwordHash: ownerHash,
+      firstName: 'Aurora',
+      lastName: 'Vega',
+      role: 'OWNER',
+      isActive: true,
+    },
+    create:{
+      email: OWNER_EMAIL,
+      passwordHash: ownerHash,
+      firstName: 'Aurora',
+      lastName: 'Vega',
+      role: 'OWNER',
+      isActive: true,
+    },
+  });
+
+  // Create or update GUEST user
+  await prisma.user.upsert({
+    where: { email: GUEST_EMAIL },
+    update: {
+      passwordHash: guestHash,
+      firstName: 'John',
+      lastName: 'Guest',
+      role: 'GUEST',
+      isActive: true,
+    },
+    create: {
+      email: GUEST_EMAIL,
+      passwordHash: guestHash,
+      firstName: 'John',
+      lastName: 'Guest',
+      role: 'GUEST',
+      isActive: true,
+    },
+  });
+
+  // Create restaurant owned by OWNER user
   await prisma.restaurant.upsert({
     where: { id: RESTAURANT_ID },
     update: {
@@ -49,6 +119,7 @@ async function main() {
       },
       status: 'LIVE',
       isActive: true,
+      ownerId: ownerUser.id,
     },
     create: {
       id: RESTAURANT_ID,
@@ -73,6 +144,7 @@ async function main() {
       },
       status: 'LIVE',
       isActive: true,
+      ownerId: ownerUser.id,
     },
   });
 
@@ -151,44 +223,41 @@ async function main() {
     },
   });
 
+  // Create sample staff members for the restaurant
   await prisma.staff.upsert({
-    where: { email: SUPER_ADMIN_EMAIL },
+    where: { email: 'manager@northwind.table' },
     update: {
-      passwordHash: superAdminHash,
-      firstName: 'Super',
-      lastName: 'Admin',
-      role: 'SUPER_ADMIN',
+      firstName: 'James',
+      lastName: 'Wilson',
+      role: 'MANAGER',
       isActive: true,
     },
     create: {
-      email: SUPER_ADMIN_EMAIL,
-      staffUsername: 'super_admin_seed',
-      passwordHash: superAdminHash,
-      firstName: 'Super',
-      lastName: 'Admin',
-      role: 'SUPER_ADMIN',
+      email: 'manager@northwind.table',
+      firstName: 'James',
+      lastName: 'Wilson',
+      role: 'MANAGER',
+      restaurantId: RESTAURANT_ID,
+      createdBy: ownerUser.id,
       isActive: true,
     },
   });
 
   await prisma.staff.upsert({
-    where: { email: OWNER_EMAIL },
+    where: { email: 'staff@northwind.table' },
     update: {
-      passwordHash: ownerHash,
-      firstName: 'Aurora',
-      lastName: 'Vega',
-      role: 'OWNER',
-      restaurantId: RESTAURANT_ID,
+      firstName: 'Sarah',
+      lastName: 'Johnson',
+      role: 'STAFF',
       isActive: true,
     },
     create: {
-      email: OWNER_EMAIL,
-      staffUsername: 'aurora_vega_owner',
-      passwordHash: ownerHash,
-      firstName: 'Aurora',
-      lastName: 'Vega',
-      role: 'OWNER',
+      email: 'staff@northwind.table',
+      firstName: 'Sarah',
+      lastName: 'Johnson',
+      role: 'STAFF',
       restaurantId: RESTAURANT_ID,
+      createdBy: ownerUser.id,
       isActive: true,
     },
   });
@@ -282,8 +351,9 @@ async function main() {
     });
   }
 
-  console.log('✅ Super-admin seeded:', SUPER_ADMIN_EMAIL, '/', SUPER_ADMIN_PASSWORD);
-  console.log('✅ Restaurant owner seeded:', OWNER_EMAIL, '/', OWNER_PASSWORD);
+  console.log('✅ Admin user seeded:', ADMIN_EMAIL, '/', ADMIN_PASSWORD);
+  console.log('✅ Owner user seeded:', OWNER_EMAIL, '/', OWNER_PASSWORD);
+  console.log('✅ Guest user seeded:', GUEST_EMAIL, '/', GUEST_PASSWORD);
   console.log('✅ Sample restaurants created (5 total)');
 }
 

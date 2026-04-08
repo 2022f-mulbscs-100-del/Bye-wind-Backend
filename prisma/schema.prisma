@@ -25,12 +25,17 @@ enum RestaurantStatus {
   SUSPENDED       // Temporarily disabled
 }
 
-/// Sub-module 8 — Staff roles for RBAC
+/// Sub-module 7A — User roles for guests, owners, and admins
+enum UserRole {
+  GUEST     // Regular guest/customer browsing restaurants
+  OWNER     // User who registered a restaurant
+  ADMIN     // Platform administrator
+}
+
+/// Sub-module 8 — Staff roles for restaurant employees
 enum StaffRole {
-  SUPER_ADMIN  // Full access to ALL restaurants (platform-level)
-  OWNER        // Full access to their own restaurant (Owner/Admin)
-  HOST         // Access to reservations and guest management
-  STAFF        // Kitchen/Waitstaff — table and order management
+  STAFF     // Restaurant employee (limited access)
+  MANAGER   // Restaurant manager (elevated access)
 }
 
 /// Sub-module 3 — Days of the week
@@ -180,6 +185,7 @@ enum DietaryRestriction {
 /// Root entity — one Restaurant = one master account (tenant)
 model Restaurant {
   id                String           @id @default(uuid())
+  ownerId           String?          @unique // User who owns this restaurant
 
   // Core identity
   legalBusinessName String
@@ -207,6 +213,7 @@ model Restaurant {
   updatedAt         DateTime         @updatedAt
 
   // ── Relations ──────────────────────────────────────────────────────
+  owner                 User?                         @relation(fields: [ownerId], references: [id], onDelete: SetNull)
   branches              Branch[]
   staff                 Staff[]
   paymentGateways       PaymentGateway[]
@@ -534,22 +541,23 @@ model MenuItem {
 /// Staff member — SUPER_ADMIN has null restaurantId (platform-wide), others belong to a restaurant
 model Staff {
   id                        String    @id @default(uuid())
-  restaurantId              String?   // Nullable for SUPER_ADMIN (platform-level users)
-  email                     String    @unique
-  staffUsername             String    @unique // Username for login credentials display
-  passwordHash              String
+  restaurantId              String?   
   firstName                 String
   lastName                  String
+  email                     String    @unique
+  staffUsername             String?   @unique
+  passwordHash              String?
   phone                     String?
   role                      StaffRole
-  permissions               Json      @default("{}") // Granular permission overrides on top of role
+  permissions               Json      @default("{}")
   isActive                  Boolean   @default(true)
+  createdBy                 String?   
   lastLoginAt               DateTime?
-  staffCredentialCreatedAt  DateTime  @default(now())  // Track when credentials were created/reset
+  staffCredentialCreatedAt  DateTime? @default(now())
   createdAt                 DateTime  @default(now())
   updatedAt                 DateTime  @updatedAt
 
-  restaurant Restaurant?   @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  restaurant Restaurant?     @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
   branches   StaffBranch[]
   auditLogs  AuditLog[]
 
@@ -879,10 +887,49 @@ model BranchGoLiveStatus {
 }
 
 // ══════════════════════════════════════════════════════════════════════
-// SUB-MODULE 17 — Guest Profiles & User Management
+// SUB-MODULE 17 — User Management & Authentication
 // ══════════════════════════════════════════════════════════════════════
 
-/// Guest profile — user account for restaurant guests
+/// User profile — auth & identity for guests, owners, and admins
+model User {
+  id              String    @id @default(uuid())
+  firstName       String
+  lastName        String
+  email           String    @unique
+  phone           String?
+  passwordHash    String    // Bcryptjs hashed password
+  role            UserRole  @default(GUEST)
+  
+  // Profile
+  location        String?   // City/location
+  profileImageUrl String?   // Avatar/profile picture URL
+  bio             String?
+  isActive        Boolean   @default(true)
+  
+  // Tracking
+  memberSince     DateTime  @default(now())
+  lastLoginAt     DateTime?
+  totalBookings   Int       @default(0)
+  totalSpent      Float     @default(0)
+  
+  // Contact preferences
+  receiveEmails   Boolean   @default(true)
+  receiveSMS      Boolean   @default(false)
+  
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  // Relations
+  ownedRestaurant Restaurant?
+  preferences     UserPreference?
+
+  @@index([email])
+  @@index([role])
+  @@index([memberSince])
+  @@map("users")
+}
+
+/// Guest profile — Legacy alias for backward compatibility
 model GuestProfile {
   id              String    @id @default(uuid())
   name            String
@@ -911,6 +958,25 @@ model GuestProfile {
   @@index([email])
   @@index([memberSince])
   @@map("guest_profiles")
+}
+
+/// User preferences — dietary restrictions & favorite cuisines
+model UserPreference {
+  id                    String                  @id @default(uuid())
+  userId                String                  @unique
+  dietaryRestrictions   DietaryRestriction[]   @default([])
+  favoriteCuisines      String[]               @default([])
+  dietaryRestrictionsText String[]             @default([])
+  preferredPartySize    Int?
+  speakingPrefs         String[]               @default([])
+  notes                 String?
+  
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_preferences")
 }
 
 /// Guest preferences — dietary restrictions & favorite cuisines

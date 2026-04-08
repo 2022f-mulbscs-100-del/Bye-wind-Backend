@@ -107,6 +107,32 @@ class FloorPlanService {
     }
 
     const table = await floorPlanRepo.createTable(data);
+
+    // Update GoLive flags for Tables
+    const fpQuery = await prisma.floorPlan.findUnique({
+      where: { id: data.floorPlanId },
+      select: { branchId: true },
+    });
+
+    if (fpQuery && fpQuery.branchId) {
+      const branchId = fpQuery.branchId;
+      await prisma.branchGoLiveStatus.updateMany({
+        where: { branchId },
+        data: { tablesConfiguredDone: true },
+      });
+
+      const branch = await prisma.branch.findUnique({
+        where: { id: branchId },
+        select: { restaurantId: true }
+      });
+      if (branch) {
+        await prisma.goLiveChecklist.update({
+          where: { restaurantId: branch.restaurantId },
+          data: { tablesConfiguredDone: true },
+        });
+      }
+    }
+
     await createAuditLog({ entity: 'Table', entityId: table.id, action: 'CREATE', newValue: table, auditContext });
     return table;
   }

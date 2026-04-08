@@ -95,7 +95,7 @@ class PublicRestaurantService {
                 description: true,
                 price: true,
                 category: true,
-                image: true,
+                imageUrl: true,
                 isAvailable: true,
               },
               take: 30,
@@ -110,7 +110,7 @@ class PublicRestaurantService {
                 dayOfWeek: true,
                 openTime: true,
                 closeTime: true,
-                isClosed: true,
+                isOpen: true,
               },
             })
             .catch(() => []),

@@ -15,6 +15,9 @@
     "lint": "eslint src/",
     "test": "jest --passWithNoTests"
   },
+  "prisma": {
+    "seed": "node prisma/seed.js"
+  },
   "dependencies": {
     "@prisma/client": "^5.20.0",
     "bcryptjs": "^2.4.3",

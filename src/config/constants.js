@@ -38,7 +38,7 @@ const PERMISSIONS = {
 
   // ── Business Hours & Holidays ─────────────────────────────────────
   'hours:read':         [ROLES.OWNER, ROLES.HOST, ROLES.STAFF],
-  'hours:write':        [ROLES.OWNER],
+  'hours:write':        [ROLES.OWNER, ROLES.STAFF],
 
   // ── Floor Plans & Tables ──────────────────────────────────────────
   'floor-plan:read':    [ROLES.OWNER, ROLES.HOST, ROLES.STAFF],

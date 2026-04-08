@@ -7,7 +7,7 @@ const getStatus = asyncHandler(async (req, res) => {
 });
 
 const activate = asyncHandler(async (req, res) => {
-  const result = await goLiveService.activate(req.params.restaurantId, req.auditContext);
+  const result = await goLiveService.activate(req.params.restaurantId, req.query.branchId, req.auditContext);
   ApiResponse.ok(result.message, result).send(res);
 });
 

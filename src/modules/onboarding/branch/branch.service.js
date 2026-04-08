@@ -18,6 +18,30 @@ class BranchService {
         data: { branchId: created.id },
       });
 
+      // Initialize default Reservation Policy
+      await tx.reservationPolicy.create({
+        data: {
+          branchId: created.id,
+          minPartySize: 1,
+          maxPartySize: 20,
+          advanceBookingDays: 30,
+          sameDayCutoffMins: 60,
+          autoConfirm: true
+        }
+      });
+
+      // Initialize default Turn Time Rule
+      await tx.turnTimeRule.create({
+        data: {
+          branchId: created.id,
+          name: "Default",
+          partySizeMin: 1,
+          partySizeMax: 100,
+          durationMins: 90,
+          isDefault: true
+        }
+      });
+
       // Update restaurant go-live checklist
       await tx.goLiveChecklist.updateMany({
         where: { restaurantId },

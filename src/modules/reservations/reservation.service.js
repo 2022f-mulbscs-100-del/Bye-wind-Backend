@@ -43,6 +43,13 @@ class ReservationService {
     return days[date.getDay()];
   }
 
+  // Helper: Check if two dates are the same day (ignoring time)
+  _isSameDay(date1, date2) {
+    return date1.getFullYear() === date2.getFullYear() &&
+           date1.getMonth() === date2.getMonth() &&
+           date1.getDate() === date2.getDate();
+  }
+
   // Helper: Determine meal type from time slot
   _getMealTypeFromTime(timeSlot) {
     const time = this._parseTimeSlot(timeSlot);
@@ -234,27 +241,63 @@ class ReservationService {
     const [openHour, openMin] = todayHours.openTime.split(':').map(Number);
     const [closeHour, closeMin] = todayHours.closeTime.split(':').map(Number);
 
-    // Generate 30-minute time slots
+    // Get turn time duration for this party size (will be used as interval)
+    const mealType = this._getMealTypeFromTime(this._formatTimeSlot(openHour, openMin));
+    const intervalMins = await this.getTurnTimeDuration(branchId, partySize, reservationDate, this._formatTimeSlot(openHour, openMin), mealType);
+
+    console.log(`📅 Generating slots for ${reservationDate} (${dayOfWeek}):`, {
+      businessHours: `${openHour}:${String(openMin).padStart(2, '0')} - ${closeHour}:${String(closeMin).padStart(2, '0')}`,
+      turnTimeInterval: `${intervalMins} mins`,
+      partySize,
+    });
+
+    // Determine start time: use current time if today, or opening time if future date or if current time is before opening
+    const now = new Date();
+    const reservationDateObj = new Date(reservationDate);
+    let startHour = openHour;
+    let startMin = openMin;
+
+    // If the reservation date is today, start from current time (if after opening)
+    if (this._isSameDay(now, reservationDateObj)) {
+      const currentHour = now.getHours();
+      const currentMin = now.getMinutes();
+
+      if (currentHour > openHour || (currentHour === openHour && currentMin > openMin)) {
+        // Start from current time, rounded up to next interval
+        startHour = currentHour;
+        startMin = currentMin;
+      }
+      console.log(`⏰ Today's reservation - starting from current time:`, this._formatTimeSlot(currentHour, currentMin));
+    } else {
+      console.log(`📆 Future date - starting from opening time`);
+    }
+
+    // Generate time slots using turn time as interval
     const slots = [];
-    let currentHour = openHour;
-    let currentMin = openMin;
+    let currentHour = startHour;
+    let currentMin = startMin;
 
     while (currentHour < closeHour || (currentHour === closeHour && currentMin < closeMin)) {
       const timeLabel = this._formatTimeSlot(currentHour, currentMin);
       slots.push(timeLabel);
 
-      // Increment by 30 minutes
-      currentMin += 30;
-      if (currentMin >= 60) {
-        currentMin = 0;
+      // Increment by turn time interval
+      currentMin += intervalMins;
+      while (currentMin >= 60) {
+        currentMin -= 60;
         currentHour += 1;
+      }
+
+      // Stop if we've gone past closing time
+      if (currentHour > closeHour || (currentHour === closeHour && currentMin >= closeMin)) {
+        break;
       }
     }
 
     // For each slot, check availability
     const slotsWithStatus = await Promise.all(
       slots.map(async (slot) => {
-        // Get turn time for this party size and slot
+        // Get turn time for this specific slot and party size
         const mealType = this._getMealTypeFromTime(slot);
         const durationMins = await this.getTurnTimeDuration(branchId, partySize, reservationDate, slot, mealType);
 
@@ -298,6 +341,7 @@ class ReservationService {
       })
     );
 
+    console.log(`✅ Generated ${slotsWithStatus.length} time slots:`, slotsWithStatus.map(s => `${s.label} (${s.status}, ${s.durationMins}min)`));
     return slotsWithStatus;
   }
 

@@ -5,12 +5,16 @@ const asyncHandler = require('../shared/utils/asyncHandler');
 
 /**
  * JWT authentication middleware.
+ * Supports both User and Staff authentication.
  *
- * Behaviour by role:
- *   SUPER_ADMIN → restaurantId is resolved from the `x-restaurant-id` header.
- *                 If the header is missing, req.restaurantId stays null
- *                 (acceptable for platform-wide endpoints).
- *   OWNER/HOST/STAFF → restaurantId comes from the staff record.
+ * User roles (from User model):
+ *   GUEST → no restaurant access
+ *   OWNER → locked to their owned restaurant (restaurantId from token)
+ *   ADMIN → can access any restaurant via x-restaurant-id header
+ *
+ * Staff roles (from Staff model):
+ *   SUPER_ADMIN → restaurantId from x-restaurant-id header
+ *   OWNER/HOST/STAFF → locked to their assigned restaurant
  */
 const authenticate = asyncHandler(async (req, _res, next) => {
   // 1. Extract token
@@ -31,50 +35,74 @@ const authenticate = asyncHandler(async (req, _res, next) => {
     throw ApiError.unauthorized('Invalid token');
   }
 
-  // 3. Load staff from DB
-  const staff = await prisma.staff.findUnique({
-    where: { id: decoded.staffId },
-    select: {
-      id: true,
-      restaurantId: true,
-      email: true,
-      firstName: true,
-      lastName: true,
-      role: true,
-      permissions: true,
-      isActive: true,
-    },
-  });
+  // 3. Determine if this is a User or Staff token and load accordingly
+  let authRecord;
+  let isUserAuth = false;
 
-  if (!staff || !staff.isActive) {
-    throw ApiError.unauthorized('Account is inactive or does not exist');
-  }
+  if (decoded.userId) {
+    // USER authentication (new system)
+    isUserAuth = true;
+    authRecord = await prisma.user.findUnique({
+      where: { id: decoded.userId },
+      select: {
+        id: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        role: true,
+        isActive: true,
+      },
+    });
 
-  // 4. Attach user to request
-  req.user = staff;
-
-  // 5. Resolve tenant (restaurantId)
-  if (staff.role === ROLES.SUPER_ADMIN) {
-    // Super admins specify the target restaurant via header (optional).
-    // Routes that require a restaurantId will validate its presence.
-    const headerRestaurantId = req.headers['x-restaurant-id'] || null;
-
-    // Validate the restaurant exists if header is provided
-    if (headerRestaurantId) {
-      const restaurant = await prisma.restaurant.findUnique({
-        where: { id: headerRestaurantId },
-        select: { id: true },
-      });
-      if (!restaurant) {
-        throw ApiError.notFound(`Restaurant ${headerRestaurantId} not found`);
-      }
+    if (!authRecord || !authRecord.isActive) {
+      throw ApiError.unauthorized('Account is inactive or does not exist');
     }
 
-    req.restaurantId = headerRestaurantId;
+    // For OWNER users, get their restaurant ID from the token
+    req.restaurantId = decoded.restaurantId || null;
+  } else if (decoded.staffId) {
+    // STAFF authentication (legacy system)
+    authRecord = await prisma.staff.findUnique({
+      where: { id: decoded.staffId },
+      select: {
+        id: true,
+        restaurantId: true,
+        email: true,
+        firstName: true,
+        lastName: true,
+        role: true,
+        permissions: true,
+        isActive: true,
+      },
+    });
+
+    if (!authRecord || !authRecord.isActive) {
+      throw ApiError.unauthorized('Account is inactive or does not exist');
+    }
+
+    // Resolve tenant (restaurantId) for staff
+    if (authRecord.role === ROLES.SUPER_ADMIN) {
+      const headerRestaurantId = req.headers['x-restaurant-id'] || null;
+      if (headerRestaurantId) {
+        const restaurant = await prisma.restaurant.findUnique({
+          where: { id: headerRestaurantId },
+          select: { id: true },
+        });
+        if (!restaurant) {
+          throw ApiError.notFound(`Restaurant ${headerRestaurantId} not found`);
+        }
+      }
+      req.restaurantId = headerRestaurantId;
+    } else {
+      req.restaurantId = authRecord.restaurantId;
+    }
   } else {
-    // Regular roles — locked to their own restaurant
-    req.restaurantId = staff.restaurantId;
+    throw ApiError.unauthorized('Invalid token structure');
   }
+
+  // 4. Attach authenticated user to request
+  req.user = authRecord;
+  req.isUserAuth = isUserAuth;
 
   next();
 });

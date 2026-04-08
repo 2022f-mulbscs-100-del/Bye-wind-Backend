@@ -22,8 +22,7 @@ class StaffRepository {
 
   async findAllByRestaurant(restaurantId, { skip, take, branchId }) {
     const where = { 
-      restaurantId,
-      role: { notIn: ['SUPER_ADMIN', 'OWNER'] } // Exclude admin roles
+      restaurantId
     };
     if (branchId) {
       where.branches = { some: { branchId } };
